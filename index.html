@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title> K Boost MM</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* BASE STYLES & VARIABLES (Slightly enhanced dark theme) */
+        :root{
+            --primary: #D50000; /* Red */
+            --primary-light: #FF5252; /* Lighter Red */
+            --accent: #FF1744; /* Bright Red Accent */
+            --success: #00E676;
+            --danger: #ff3d57;
+            --dark-bg: #0A0A0A; /* Deep Black */
+            --container-bg: rgba(25, 25, 25, 0.95); /* Darker, more solid container */
+            --card-bg: rgba(255, 255, 255, 0.05); /* Slightly transparent card */
+            --border: rgba(255,255,255,0.1);
+            --muted: rgba(255,255,255,0.6);
+            --kpay-color: #32cd32;
+        }
+
+        *, *:before, *:after{box-sizing:border-box; transition:0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);}
+        html,body{
+            height:100%;margin:0;font-family:'Poppins', 'Padauk', sans-serif;
+            background:linear-gradient(180deg, var(--dark-bg) 0%, #1c1c1c 100%);
+            color:#fff;-webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+        }
+
+        /* UTILITIES & BASE COMPONENTS */
+        .section-title{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--primary-light);margin-bottom:20px; font-size: 1.2em;}
+        .container-glass{
+            background: var(--container-bg);
+            border: 1px solid var(--border);
+            border-radius: 15px; /* Slightly smoother corners */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 10px rgba(255, 0, 0, 0.1); /* Deeper shadow with subtle glow */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        /* FORM ELEMENTS */
+        .form-group{margin-bottom: 25px;}
+        .form-label{display:block;font-weight:600;font-size:14px;margin-bottom:8px;color:var(--muted);display:flex;gap:8px;align-items:center;}
+        .form-input, .form-textarea, .form-select{
+            width:100%;padding:15px 18px;border-radius:10px; /* Smoother radius */
+            border:1px solid rgba(255,255,255,0.15);
+            background:rgba(255,255,255,0.05); /* Lighter input background */
+            color:#fff;font-size:16px;outline:none;
+        }
+        .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
+        .form-select { -webkit-appearance: none; -moz-appearance: none; appearance: none; cursor: pointer; padding-right: 45px; }
+        .custom-select-wrapper{position: relative;}
+        .custom-select-icon {position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--primary-light); pointer-events: none; font-size: 1.2em;}
+        .form-select option {background: var(--dark-bg); color: #fff; padding: 10px;}
+        
+        /* BUTTON STYLES */
+        .btn-primary, .btn-secondary, .admin-access-btn, .admin-submit-btn{
+            padding: 12px 20px;border-radius: 10px; /* Consistent radius */
+            border: none;cursor: pointer;
+            font-weight: 700;display: flex;align-items: center;justify-content: center;
+            gap: 8px;text-decoration: none;
+            white-space: nowrap; 
+        }
+        .btn-primary{
+            background: linear-gradient(135deg, var(--primary), #FF5252);
+            color: #fff;box-shadow: 0 5px 20px rgba(213, 0, 0, 0.5);
+        }
+        .btn-primary:hover{transform: translateY(-2px); box-shadow: 0 8px 25px rgba(213, 0, 0, 0.7);}
+        .btn-secondary { background: rgba(255,255,255,0.1); color: var(--primary-light); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.2); color: #fff; }
+        .btn-primary:disabled, .admin-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* HEADER REFINEMENT */
+        .user-info-bar{
+            position: sticky; top: 0; left: 0; right: 0; min-height: 80px; 
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 30px; 
+            background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+        }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .brand-logo-img { height: 40px; width: auto; border-radius: 6px; }
+        .header-left .logo-text{font-weight:800;color:var(--primary-light);font-size:24px;}
+        
+        .header-right { display: flex; align-items: center; gap: 20px; } /* Added flex container */
+
+        .admin-access-btn {
+            background: var(--primary);
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            font-size: 18px;
+            padding: 0;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        /* AUTH MODAL FIXES */
+        .auth-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .auth-container{padding: 30px; max-width: 450px; width: 100%; border-radius: 20px; text-align: center; border: 1px solid var(--border);}
+        .auth-logo-img { width: 80px; height: 80px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; border: 2px solid var(--primary); }
+        .hidden{display: none !important;}
+        
+        /* APP LAYOUT & SUMMARY */
+        .main-app{display: none; gap: 40px; padding: 40px 40px 80px; max-width: 1400px; margin: 0 auto;}
+        .summary-container{flex: 1; min-width: 300px; padding: 30px; height: fit-content; margin-top: 60px;} /* Lift summary container */
+        .order-form-container{flex: 3; padding: 35px;}
+        .summary-item{color: #fff; display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border);}
+        .summary-total{font-size: 1.8em; color: var(--primary-light); padding-top: 15px; display: flex; justify-content: space-between; font-weight: 700;}
+        
+        /* ADMIN PANEL STYLES */
+        .admin-panel {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 30px;
+        }
+        /* ... (Admin Styles remain the same) ... */
+        
+        /* Responsive Adjustments */
+        @media (max-width: 1024px) {
+            .main-app{flex-direction: column; padding: 20px;}
+            .summary-container { margin-top: 20px; }
+        }
+        @media (max-width: 600px) {
+            .user-info-bar{padding: 10px 15px;}
+            .header-left .logo-text{font-size: 20px;}
+        }
+    </style>
+    </head>
+<body>
+
+    <header class="user-info-bar">
+        <div class="header-left">
+            <img src="1000069444.jpg" alt="K Boost Logo" class="brand-logo-img">
+            <span class="logo-text">K Boost MM</span>
+        </div>
+        <div class="header-right">
+             <button class="admin-access-btn" id="admin-access-button" style="display:none;">K</button>
+
+            <div class="user-welcome" id="header-user-info" style="display:none;">
+                <div class="user-avatar" id="user-avatar-initial">N</div>
+                <div class="user-details">
+                    <span class="user-name" id="display-username">Nam Nam</span>
+                    <span class="user-email" id="display-email">username@email.alt</span>
+                </div>
+            </div>
+            <button class="logout-btn btn-secondary" id="logout-button" style="display:none;">
+                <i class="fas fa-sign-out-alt"></i> 
+            </button>
+        </div>
+    </header>
+
+    <div class="auth-modal admin-modal hidden" id="admin-password-modal">
+        <div class="auth-container container-glass" style="max-width: 350px;">
+            <button class="admin-close-btn" id="admin-close-modal"><i class="fas fa-times"></i></button>
+            <div class="auth-header">
+                <img src="1000069444.jpg" alt="K Boost MM" class="auth-logo-img" style="border: 2px solid var(--primary-light);">
+                <h2>Admin Login</h2>
+                <p>Service   Password </p>
+            </div>
+            
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="form-group">
+                    <label class="form-label" for="admin-password-input"><i class="fas fa-key"></i> Password</label>
+                    <input type="password" id="admin-password-input" class="form-input" placeholder="Admin Password" required>
+                    <p id="admin-password-error" class="response-message response-error" style="display:none; margin-top: 10px;"></p>
+                </div>
+                <button type="submit" class="auth-btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> 
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="auth-modal" id="auth-modal">
+        <div class="auth-container container-glass">
+            <div class="auth-header">
+                <img src="1000069444.jpg" alt="K Boost MM" class="auth-logo-img">
+                <h2></h2>
+                <p style="color:var(--muted)">  Login  Register </p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login" onclick="showTab('login')">Login</button>
+                <button class="auth-tab" data-tab="register" onclick="showTab('register')">Register</button>
+            </div>
+
+            <div id="auth-error" class="response-message response-error" style="display:none;"></div>
+
+            <form class="auth-form" id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label" for="login-email"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="login-email" class="form-input" placeholder="example@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="login-password"><i class="fas fa-lock"></i> Password</label>
+                    <div class="input-with-toggle">
+                        <input type="password" id="login-password" class="form-input" placeholder="Password" required>
+                    </div>
+                </div>
+                <button type="submit" class="auth-btn btn-primary"><i class="fas fa-sign-in-alt"></i> Login </button>
+                <div class="auth-footer">
+                    ? <span class="auth-link" onclick="showTab('register')">Register </span>
+                </div>
+            </form>
+
+            <form class="auth-form hidden" id="register-form" onsubmit="handleRegister(event)">
+                 <div class="form-group">
+                    <label class="form-label" for="register-username"><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="register-username" class="form-input" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="register-email"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="register-email" class="form-input" placeholder="example@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="register-password"><i class="fas fa-lock"></i> Password</label>
+                    <div class="input-with-toggle">
+                        <input type="password" id="register-password" class="form-input" placeholder="Password (  )" required minlength="6">
+                    </div>
+                </div>
+                <button type="submit" class="auth-btn btn-primary"><i class="fas fa-user-plus"></i> </button>
+                <div class="auth-footer">
+                    ? <span class="auth-link" onclick="showTab('login')">Login </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <main class="main-app" id="main-app">
+        
+        <div class="order-form-container container-glass">
+            <h2 class="section-title"><i class="fas fa-edit"></i> </h2>
+            
+            <div class="step-indicator">
+                <span class="step-item active" id="step-1-indicator">  </span>
+                <span class="step-item" id="step-2-indicator">  </span>
+                <span class="step-item" id="step-3-indicator">  </span>
+            </div>
+
+            <form id="multi-step-order-form" onsubmit="event.preventDefault()">
+
+                <div class="step-content" id="step-1">
+                    <h3 class="section-title"><i class="fas fa-mouse-pointer"></i> Step 1:  </h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="service-select"><i class="fas fa-hand-pointer"></i>  </label>
+                        
+                        <div class="custom-select-wrapper">
+                             <select id="service-select" class="form-select" onchange="selectService(this.value)" required>
+                                </select>
+                             <i class="fas fa-chevron-down custom-select-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <div></div> 
+                        <button type="button" class="btn-primary" onclick="nextStep(1)">
+                            Next Step <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="step-content hidden" id="step-2">
+                    <h3 class="section-title"><i class="fas fa-info-circle"></i> Step 2:  </h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="link-input-step2"><i class="fas fa-link"></i> Link/ID (Post/Page/Video Link)</label>
+                        <input type="url" id="link-input-step2" class="form-input" placeholder=" Link  " required oninput="updateSummary()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="qty-input-step2"><i class="fas fa-sort-numeric-up-alt"></i>  (Qty)</label>
+                        <input type="number" id="qty-input-step2" class="form-input" placeholder="  (: 1)" min="1" value="1" oninput="updateSummary()" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="note-input-step2"><i class="fas fa-comment"></i>  (Admin )</label>
+                        <textarea id="note-input-step2" class="form-input form-textarea" placeholder="" rows="3"></textarea>
+                    </div>
+
+                    <div class="step-actions">
+                        <button type="button" class="btn-secondary" onclick="prevStep(2)">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button type="button" class="btn-primary" onclick="nextStep(2)">
+                            Next Step <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="step-content hidden" id="step-3">
+                    <h3 class="section-title"><i class="fas fa-check-circle"></i> Step 3:  </h3>
+
+                    <div class="payment-info-step">
+                        <h4 style="color:var(--accent); margin-top:0;"><i class="fas fa-wallet"></i>  </h4>
+                        
+                        <div class="payment-item kpay">
+                            <i class="fas fa-mobile-alt fa-2x" style="color:var(--kpay-color);"></i>
+                            <div class="item-text">
+                                <strong>KBZPay (KPay)</strong>
+                                <span>: Chit Thae Oo</span>
+                                <span>: 09 970 573 598</span>
+                            </div>
+                            <i class="fas fa-copy" onclick="copyToClipboard('09970573598')"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 25px;">
+                        <label class="form-label" for="txn-id-input"><i class="fas fa-receipt"></i>  (Transaction ID - 5 )</label>
+                        <input type="text" id="txn-id-input" class="form-input" placeholder="KBZPay  5 " required maxlength="5" pattern="\d{5}" oninput="updateSummary()">
+                        <p style="font-size: 0.8em; color: var(--danger); margin-top: 5px;">*   </p>
+                    </div>
+
+                    <div id="order-response-message" class="response-message" style="display:none;"></div>
+
+                    <div class="step-actions">
+                        <button type="button" class="btn-secondary" onclick="prevStep(3)">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button type="submit" class="btn-primary" id="final-submit-btn" onclick="handleOrder(event)">
+                            <i class="fas fa-paper-plane"></i> Order  
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="summary-container container-glass">
+            <h3 class="section-title"><i class="fas fa-clipboard-list"></i> Order </h3>
+            <div class="summary-details">
+                <div class="summary-item">
+                    <span class="summary-label"></span>
+                    <span class="summary-value" id="summary-service">--  --</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Link/ID</span>
+                    <span class="summary-value" id="summary-link">N/A</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label"></span>
+                    <span class="summary-value" id="summary-qty">0</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label"> ()</span>
+                    <span class="summary-value" id="summary-unit-price">0 Ks</span>
+                </div>
+            </div>
+            <div class="summary-total">
+                <span> </span>
+                <span id="summary-total-price">0 Ks</span>
+            </div>
+        </div>
+        
+    </main>
+    
+    <div class="admin-panel container-glass hidden" id="admin-panel">
+        <div class="admin-controls">
+            <h2 class="section-title"><i class="fas fa-cogs"></i> Service Management (Admin)</h2>
+            <button class="btn-secondary" onclick="handleAdminBack()"><i class="fas fa-sign-out-alt"></i> Back to User View</button>
+        </div>
+
+        <h3 style="color: var(--primary-light); margin-bottom: 15px;">Existing Services</h3>
+        <table class="service-table">
+            <thead>
+                <tr>
+                    <th>Platform</th>
+                    <th>Name</th>
+                    <th>Price (Ks)</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="admin-service-list">
+                </tbody>
+        </table>
+
+        <div id="admin-response-message" class="response-message response-success" style="display:none; margin-top: 20px;"></div>
+
+        <div class="add-service-form">
+            <h3 style="color: var(--accent); margin-bottom: 20px;"><i class="fas fa-plus-circle"></i> Add New Service</h3>
+            <form id="add-service-form" onsubmit="handleAddService(event)">
+                <div class="form-group">
+                    <label class="form-label" for="add-id">Service ID (e.g., NEW_FB_LIKE)</label>
+                    <input type="text" id="add-id" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="add-platform">Platform (e.g., Facebook, TikTok)</label>
+                    <input type="text" id="add-platform" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="add-name">Service Name (e.g., Like 100)</label>
+                    <input type="text" id="add-name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="add-price">Price (per unit - Ks)</label>
+                    <input type="number" id="add-price" class="form-input" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="add-category">Category (e.g., Facebook Services)</label>
+                    <input type="text" id="add-category" class="form-input" required>
+                </div>
+                <button type="submit" class="btn-primary admin-submit-btn"><i class="fas fa-save"></i> Save New Service</button>
+            </form>
+        </div>
+    </div>
+
+    
+    <script>
+        
+        // **********************************************
+        //  BOT TOKEN & CHAT ID (Confirmed)
+        // **********************************************
+        const BOT_TOKEN = '7734532915:AAEFxYS24qJXIpvgFAbvnqj9L2rs_MYzdSc'; 
+        const CHAT_ID = '8582088849'; // Admin/Destination Chat ID             
+        const API_BASE_URL = `https://api.telegram.org/bot${BOT_TOKEN}`;
+        // **********************************************
+        const ADMIN_PASSWORD = 'Kyaw'; 
+        
+        // Data & State Management (Stored as a mutable array)
+        let services = [
+            { id: 'FB_LIKE_1K', platform: 'Facebook', name: 'Like 1,000', price: 2000, icon: 'fab fa-facebook-f facebook', category: 'Facebook Services' },
+            { id: 'FB_FOLLOW_1K', platform: 'Facebook', name: 'Follower 1,000', price: 3500, icon: 'fas fa-user-plus facebook', category: 'Facebook Services' },
+            { id: 'FB_SHARE_100', platform: 'Facebook', name: 'Share 100', price: 1500, icon: 'fas fa-share facebook', category: 'Facebook Services' },
+            { id: 'FB_VIEW_10K', platform: 'Facebook', name: 'Video View 10,000', price: 2500, icon: 'fas fa-eye facebook', category: 'Facebook Services' },
+            { id: 'TT_VIEW_10K', platform: 'TikTok', name: 'View 10,000', price: 1000, icon: 'fab fa-tiktok tiktok', category: 'TikTok Services' },
+            { id: 'TT_LIKE_1K', platform: 'TikTok', name: 'Like 1,000', price: 2500, icon: 'fas fa-heart tiktok', category: 'TikTok Services' },
+            { id: 'TT_FOLLOW_100', platform: 'TikTok', name: 'Follower 100', price: 1800, icon: 'fas fa-user-friends tiktok', category: 'TikTok Services' },
+            { id: 'YT_SUB_100', platform: 'Youtube', name: 'Subscriber 100', price: 5000, icon: 'fab fa-youtube youtube', category: 'Youtube Services' },
+            { id: 'YT_LIKE_100', platform: 'Youtube', name: 'Like 100', price: 1200, icon: 'far fa-thumbs-up youtube', category: 'Youtube Services' },
+            { id: 'TELE_MEM_100', platform: 'Telegram', name: 'Member 100', price: 1500, icon: 'fab fa-telegram-plane telegram', category: 'Telegram Services' },
+            { id: 'TELE_VIEW_1K', platform: 'Telegram', name: 'Post View 1,000', price: 800, icon: 'fas fa-chart-line telegram', category: 'Telegram Services' }
+        ];
+
+        let currentUser = null; 
+        let currentStep = 1;
+        let selectedService = null; 
+        
+        // --- TELEGRAM API FUNCTION (Retained) ---
+        async function sendToTelegram(message) {
+            const payload = {
+                chat_id: CHAT_ID,
+                text: message, 
+                parse_mode: 'MarkdownV2'
+            };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await response.json();
+                
+                if (!data.ok) {
+                    console.error("Telegram API Error:", data.description);
+                    return { ok: false, error: data.description };
+                }
+                
+                return { ok: true };
+                
+            } catch (error) {
+                console.error("Network or Fetch Error sending to Telegram:", error);
+                return { ok: false, error: "Network Error or invalid API configuration." };
+            }
+        }
+
+        // --- AUTH/UI FUNCTIONS (UPDATED: Added Admin Button Visibility) ---
+        function showMessage(elementId, message, isSuccess) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = 'response-message ' + (isSuccess ? 'response-success' : 'response-error');
+            element.style.display = 'block';
+            setTimeout(() => { element.style.display = 'none'; }, 6000);
+        }
+        
+        function showTab(tabName) {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const authError = document.getElementById('auth-error');
+            
+            if (loginForm) loginForm.classList.add('hidden');
+            if (registerForm) registerForm.classList.add('hidden');
+            
+            if (tabName === 'login' && loginForm) loginForm.classList.remove('hidden');
+            if (tabName === 'register' && registerForm) registerForm.classList.remove('hidden');
+            
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-tab') === tabName) {
+                    tab.classList.add('active');
+                }
+            });
+
+            if (authError) authError.style.display = 'none';
+        }
+
+        function updateUI(user) {
+            const isLogged = user !== null;
+            
+            const authModal = document.getElementById('auth-modal');
+            if(authModal) authModal.style.display = isLogged ? 'none' : 'flex';
+            
+            const mainApp = document.getElementById('main-app');
+            // Only show main app if NOT in admin panel
+            const isAdminPanelOpen = !document.getElementById('admin-panel').classList.contains('hidden');
+            if(mainApp) mainApp.style.display = isLogged && !isAdminPanelOpen ? 'flex' : 'none'; 
+            
+            const headerUserInfo = document.getElementById('header-user-info');
+            const logoutButton = document.getElementById('logout-button');
+            const adminAccessButton = document.getElementById('admin-access-button'); // NEW: Admin Button
+
+            // Control Visibility
+            if (headerUserInfo) headerUserInfo.style.display = isLogged ? 'flex' : 'none';
+            if (logoutButton) logoutButton.style.display = isLogged ? 'flex' : 'none';
+            if (adminAccessButton) adminAccessButton.style.display = isLogged ? 'flex' : 'none'; // NEW: Only show if logged in
+            
+            if (isLogged) {
+                const usernameDisplay = document.getElementById('display-username');
+                const emailDisplay = document.getElementById('display-email');
+                const avatarInitial = document.getElementById('user-avatar-initial');
+                
+                if (usernameDisplay) usernameDisplay.textContent = user.username;
+                if (emailDisplay) emailDisplay.textContent = user.email;
+                if (avatarInitial) avatarInitial.textContent = user.username.charAt(0).toUpperCase();
+            }
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert(`"${text}"  `);
+            }, (err) => {
+                console.error('Could not copy text: ', err);
+            });
+        }
+        
+        // --- AUTHENTICATION HANDLERS (Retained Logic) ---
+        async function handleRegister(event) {
+             event.preventDefault();
+            const username = document.getElementById('register-username').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value.trim();
+            
+            if (!username || !email || password.length < 6) {
+                showMessage('auth-error', '   Password    ', false);
+                return;
+            }
+            
+            const escapeMarkdownV2 = (text) => text.replace(/([_\*[\]()~`>#+\-=|{}.!])/g, '\\$1');
+
+            const message = 
+` *New User Registration* 
+
+*Username:* ${escapeMarkdownV2(username)}
+*Email:* ${escapeMarkdownV2(email)}
+*Telegram ID:* ${escapeMarkdownV2(CHAT_ID)}
+*Password \\(Demo\\):* ${escapeMarkdownV2(password)}
+*Time:* ${escapeMarkdownV2(new Date().toLocaleString('en-US', { hour12: true, timeZoneName: 'short' }))}`;
+
+            const result = await sendToTelegram(message);
+
+            if (result.ok) {
+                currentUser = { username, email, password, id: CHAT_ID }; 
+                updateUI(currentUser);
+                showMessage('auth-error', ' Register  Admin Bot  Message ', true);
+            } else {
+                showMessage('auth-error', `Register : ${result.error}`, false);
+            }
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            
+            if (!email || !password) {
+                 showMessage('auth-error', 'Email  Password  ', false);
+                 return;
+            }
+            
+            const simulatedUser = { 
+                username: email.split('@')[0] || "User", 
+                email: email, 
+                password: password, 
+                id: CHAT_ID
+            };
+            
+            const escapeMarkdownV2 = (text) => text.replace(/([_\*[\]()~`>#+\-=|{}.!])/g, '\\$1');
+
+            const message = 
+` *User Login* 
+
+*Email:* ${escapeMarkdownV2(email)}
+*Telegram ID:* ${escapeMarkdownV2(CHAT_ID)}
+*Time:* ${escapeMarkdownV2(new Date().toLocaleString('en-US', { hour12: true, timeZoneName: 'short' }))}`;
+
+            const result = await sendToTelegram(message);
+
+            if (result.ok) {
+                currentUser = simulatedUser;
+                updateUI(currentUser);
+                showMessage('auth-error', ' Login  Admin Bot  Message ', true);
+                
+                selectedService = null;
+                currentStep = 1;
+                renderServiceSelect(); 
+                updateSummary();
+                updateStepUI();
+                const form = document.getElementById('multi-step-order-form');
+                if (form) form.reset();
+            } else {
+                showMessage('auth-error', `Login : ${result.error}`, false);
+            }
+        }
+        
+        document.getElementById('logout-button').addEventListener('click', () => {
+            currentUser = null;
+            updateUI(null);
+            showTab('login');
+        });
+        
+        // --- WIZARD ORDER LOGIC (Retained Logic) ---
+
+        function renderServiceSelect() {
+            const selectElement = document.getElementById('service-select');
+            if (!selectElement) return;
+
+            selectElement.innerHTML = '<option value="" disabled selected>--   --</option>'; 
+
+            const groupedServices = services.reduce((acc, service) => {
+                acc[service.category] = acc[service.category] || [];
+                acc[service.category].push(service);
+                return acc;
+            }, {});
+
+            for (const category in groupedServices) {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = category; 
+                
+                groupedServices[category].forEach(service => {
+                    const option = document.createElement('option');
+                    option.value = service.id;
+                    option.textContent = `${service.platform} ${service.name} - ${service.price.toLocaleString()} Ks (Unit Price)`;
+                    optgroup.appendChild(option);
+                });
+                selectElement.appendChild(optgroup);
+            }
+        }
+        
+        function selectService(serviceId) {
+            selectedService = services.find(s => s.id === serviceId) || null;
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const qtyInput = document.getElementById('qty-input-step2');
+            const linkInput = document.getElementById('link-input-step2');
+            const txnIdInput = document.getElementById('txn-id-input');
+            
+            const qty = parseFloat(qtyInput?.value) || 0;
+            const link = linkInput?.value || 'N/A';
+            const unitPrice = selectedService ? selectedService.price : 0;
+            
+            const totalPrice = unitPrice * qty;
+
+            document.getElementById('summary-service').textContent = selectedService ? `${selectedService.platform} ${selectedService.name}` : '--  --';
+            document.getElementById('summary-link').textContent = link.length > 25 ? link.substring(0, 22) + '...' : link;
+            document.getElementById('summary-qty').textContent = qty.toLocaleString();
+            document.getElementById('summary-unit-price').textContent = `${unitPrice.toLocaleString()} Ks`;
+            document.getElementById('summary-total-price').textContent = `${totalPrice.toLocaleString()} Ks`;
+            
+            const isReady = selectedService && qty > 0 && link && totalPrice > 0 && (currentStep < 3 || (txnIdInput && txnIdInput.value.trim().length === 5));
+
+            const finalSubmitBtn = document.getElementById('final-submit-btn');
+            if (finalSubmitBtn) {
+                 finalSubmitBtn.disabled = !isReady;
+            }
+        }
+
+        function nextStep(step) {
+            if (step === 1) {
+                if (!selectedService) {
+                    alert('  ');
+                    return;
+                }
+            } else if (step === 2) {
+                const linkInput = document.getElementById('link-input-step2');
+                const qtyInput = document.getElementById('qty-input-step2');
+                const link = linkInput?.value.trim();
+                const qty = parseFloat(qtyInput?.value);
+                
+                if (!link || qty <= 0 || isNaN(qty)) {
+                    alert('Link/ID    ');
+                    return;
+                }
+            }
+            
+            if (step < 3) {
+                 currentStep = step + 1;
+                 updateStepUI();
+                 if (currentStep === 3) updateSummary(); 
+            }
+        }
+
+        function prevStep(step) {
+            if (step > 1) {
+                currentStep = step - 1;
+                updateStepUI();
+            }
+        }
+
+        function updateStepUI() {
+            const steps = [1, 2, 3];
+            steps.forEach(step => {
+                const content = document.getElementById(`step-${step}`);
+                const indicator = document.getElementById(`step-${step}-indicator`);
+                
+                if (content) content.classList.add('hidden');
+                if (indicator) {
+                    indicator.classList.remove('active');
+                    indicator.classList.remove('completed');
+                }
+                
+                if (step === currentStep) {
+                    if (content) content.classList.remove('hidden');
+                    if (indicator) indicator.classList.add('active');
+                } else if (step < currentStep) {
+                    if (indicator) indicator.classList.add('completed');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        async function handleOrder(event) {
+            event.preventDefault();
+            
+            if (!currentUser || !selectedService) {
+                showMessage('order-response-message', 'Order  Login  ()  ', false);
+                return;
+            }
+
+            const link = document.getElementById('link-input-step2').value.trim();
+            const quantity = document.getElementById('qty-input-step2').value.trim();
+            const note = document.getElementById('note-input-step2').value.trim();
+            const totalPrice = document.getElementById('summary-total-price').textContent;
+            const txnId = document.getElementById('txn-id-input').value.trim(); 
+            
+            if (!link || parseFloat(quantity) <= 0 || txnId.length !== 5) {
+                 showMessage('order-response-message', 'Link/ID     ', false);
+                 return;
+            }
+            
+            const escapeMarkdownV2 = (text) => {
+                if (!text) return '';
+                // Note: The total price string already contains Ks, so we need to escape all special chars in it.
+                return text.replace(/([_\*[\]()~`>#+\-=|{}.!])/g, '\\$1');
+            };
+
+            const escapedLink = escapeMarkdownV2(link);
+            const escapedNote = escapeMarkdownV2(note || '_None_');
+            const escapedUsername = escapeMarkdownV2(currentUser.username);
+            const escapedEmail = escapeMarkdownV2(currentUser.email);
+            const escapedUserID = escapeMarkdownV2(currentUser.id); 
+            const escapedTxnId = escapeMarkdownV2(txnId); 
+            const escapedTime = escapeMarkdownV2(new Date().toLocaleString('en-US', { hour12: true, timeZoneName: 'short' }));
+            
+            const message = 
+` *NEW USER ORDER \\(Wizard Form\\)* 
+
+*User:* ${escapedUsername}
+*Email:* ${escapedEmail}
+*Telegram ID \\(User\\):* ${escapedUserID}
+*Service:* ${escapeMarkdownV2(selectedService.platform)} ${escapeMarkdownV2(selectedService.name)} \\(${escapeMarkdownV2(selectedService.id)}\\)
+*Quantity:* ${escapeMarkdownV2(quantity)}
+*Link/ID:* ${escapedLink}
+*Total Price:* ${escapeMarkdownV2(totalPrice)}
+*Payment Method:* KBZPay
+*Txn ID \\(\\):* ${escapedTxnId}
+*Note:* ${escapedNote}
+*Time:* ${escapedTime}`;
+
+            const submitBtn = document.getElementById('final-submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ...';
+
+            const result = await sendToTelegram(message);
+            
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Order  ';
+
+            if (result.ok) {
+                showMessage('order-response-message', ' Order   Admin Bot  Message ', true);
+                
+                const form = document.getElementById('multi-step-order-form');
+                if (form) form.reset();
+                selectedService = null;
+                currentStep = 1;
+                renderServiceSelect(); 
+                updateSummary();
+                updateStepUI(); 
+            } else {
+                showMessage('order-response-message', `Order  - ${result.error || 'Unknown Error'}`, false);
+            }
+        }
+
+        // --- ADMIN ACCESS LOGIC (Retained Logic) ---
+        
+        document.getElementById('admin-access-button').addEventListener('click', () => {
+            document.getElementById('admin-password-modal').classList.remove('hidden');
+            document.getElementById('admin-password-input').value = '';
+            document.getElementById('admin-password-error').style.display = 'none';
+        });
+
+        document.getElementById('admin-close-modal').addEventListener('click', () => {
+            document.getElementById('admin-password-modal').classList.add('hidden');
+        });
+
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            const input = document.getElementById('admin-password-input').value;
+            const errorMsg = document.getElementById('admin-password-error');
+            
+            if (input === ADMIN_PASSWORD) {
+                document.getElementById('admin-password-modal').classList.add('hidden');
+                document.getElementById('main-app').style.display = 'none'; // Hide main app
+                document.getElementById('admin-panel').classList.remove('hidden'); // Show admin panel
+                renderAdminServiceList();
+                errorMsg.style.display = 'none';
+                
+            } else {
+                errorMsg.textContent = 'Password ';
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        function handleAdminBack() {
+            document.getElementById('admin-panel').classList.add('hidden'); // Hide admin panel
+            // Re-check if user is logged in before showing main app
+            document.getElementById('main-app').style.display = currentUser ? 'flex' : 'none'; 
+            renderServiceSelect(); // Re-render user service list
+            updateSummary();
+        }
+
+        function renderAdminServiceList() {
+            const listBody = document.getElementById('admin-service-list');
+            listBody.innerHTML = '';
+
+            services.forEach((service, index) => {
+                const row = listBody.insertRow();
+                row.innerHTML = `
+                    <td>${service.platform}</td>
+                    <td>${service.name} (${service.id})</td>
+                    <td>${service.price.toLocaleString()}</td>
+                    <td><button class="admin-action-btn" onclick="deleteService(${index})"><i class="fas fa-trash-alt"></i> Delete</button></td>
+                `;
+            });
+        }
+        
+        function deleteService(index) {
+            if (confirm(`Are you sure you want to delete service: ${services[index].name}?`)) {
+                services.splice(index, 1);
+                renderAdminServiceList();
+                showMessage('admin-response-message', ' Service  ', true);
+            }
+        }
+
+        function handleAddService(event) {
+            event.preventDefault();
+            const form = event.target;
+            
+            const newService = {
+                id: form.elements['add-id'].value.trim(),
+                platform: form.elements['add-platform'].value.trim(),
+                name: form.elements['add-name'].value.trim(),
+                price: parseInt(form.elements['add-price'].value),
+                icon: 'fas fa-star', // Default icon
+                category: form.elements['add-category'].value.trim() || `${form.elements['add-platform'].value.trim()} Services`
+            };
+            
+            if (services.some(s => s.id === newService.id)) {
+                showMessage('admin-response-message', ' Service ID  ', false);
+                return;
+            }
+
+            if (isNaN(newService.price) || newService.price <= 0) {
+                 showMessage('admin-response-message', ' Price    ', false);
+                 return;
+            }
+
+            services.push(newService);
+            form.reset();
+            renderAdminServiceList();
+            showMessage('admin-response-message', ' New Service  ', true);
+        }
+
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+             // Attach event listeners for dynamic updates
+             const txnIdInput = document.getElementById('txn-id-input');
+             if (txnIdInput) {
+                 txnIdInput.addEventListener('input', updateSummary);
+             }
+             const qtyInput = document.getElementById('qty-input-step2');
+             if (qtyInput) {
+                 qtyInput.addEventListener('input', updateSummary);
+             }
+
+            updateUI(currentUser);
+            renderServiceSelect(); 
+            updateSummary();
+            updateStepUI();
+            showTab('login');
+        });
+        
+    </script>
+    </body>
+</html>
