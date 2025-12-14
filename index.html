@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title> K Boost MM</title>
+    <title>⚡ K Boost MM </title>
+    <link rel="icon" type="image/png" href="1000069444.jpg">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
@@ -26,13 +27,25 @@
 
         *, *:before, *:after{box-sizing:border-box; transition:0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);}
         html,body{
-            height:100%;margin:0;font-family:'Poppins', 'Padauk', sans-serif;
+            height:100%;margin:0;
+            font-family:'Poppins', 'Padauk', sans-serif;
+            font-size: 16px; /* Base Font Size */
             background:linear-gradient(180deg, var(--dark-bg) 0%, #1c1c1c 100%);
             color:#fff;-webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
         }
 
+        /* Myanmar Font Specific Enhancements */
+        body, .form-input, .form-textarea, .form-select, .response-message {
+            /* Prioritize Padauk for better Myanmar readability */
+            font-family: 'Padauk', 'Poppins', sans-serif; 
+        }
+        .header-left .logo-text, h1, h2, h3, h4, .btn-primary, .auth-btn {
+             /* Use Poppins for bolder titles and buttons */
+            font-family: 'Poppins', 'Padauk', sans-serif; 
+        }
+
         /* UTILITIES & BASE COMPONENTS */
-        .section-title{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--primary-light);margin-bottom:20px; font-size: 1.2em;}
+        .section-title{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--primary-light);margin-bottom:20px; font-size: 1.4em;} /* Increased size */
         .container-glass{
             background: var(--container-bg);
             border: 1px solid var(--border);
@@ -44,11 +57,11 @@
         
         /* FORM ELEMENTS */
         .form-group{margin-bottom: 25px;}
-        .form-label{display:block;font-weight:600;font-size:14px;margin-bottom:8px;color:var(--muted);display:flex;gap:8px;align-items:center;}
+        .form-label{display:block;font-weight:600;font-size:16px;margin-bottom:8px;color:var(--muted);display:flex;gap:8px;align-items:center;} /* Increased size for Myanmar text */
         .form-input, .form-textarea, .form-select{
-            width:100%;padding:15px 18px;border-radius:10px; /* Smoother radius */
+            width:100%;padding:15px 18px;border-radius:10px; 
             border:1px solid rgba(255,255,255,0.15);
-            background:rgba(255,255,255,0.05); /* Lighter input background */
+            background:rgba(255,255,255,0.05); 
             color:#fff;font-size:16px;outline:none;
         }
         .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
@@ -58,8 +71,8 @@
         .form-select option {background: var(--dark-bg); color: #fff; padding: 10px;}
         
         /* BUTTON STYLES */
-        .btn-primary, .btn-secondary, .admin-access-btn, .admin-submit-btn{
-            padding: 12px 20px;border-radius: 10px; /* Consistent radius */
+        .btn-primary, .btn-secondary, .admin-access-btn, .admin-submit-btn, .nav-btn{
+            padding: 12px 20px;border-radius: 10px; 
             border: none;cursor: pointer;
             font-weight: 700;display: flex;align-items: center;justify-content: center;
             gap: 8px;text-decoration: none;
@@ -74,51 +87,231 @@
         .btn-secondary:hover { background: rgba(255,255,255,0.2); color: #fff; }
         .btn-primary:disabled, .admin-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* HEADER REFINEMENT */
+        /* HEADER & NAVIGATION REFINEMENT */
         .user-info-bar{
-            position: sticky; top: 0; left: 0; right: 0; min-height: 80px; 
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 10px 30px; 
+            position: sticky; top: 0; left: 0; right: 0; 
+            display: flex; flex-direction: column; /* Changed to column for better responsiveness on top */
+            padding: 10px 30px 0; 
             background: rgba(10, 10, 10, 0.95);
             border-bottom: 1px solid var(--border);
             backdrop-filter: blur(10px);
             z-index: 999;
         }
+        .header-top {
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            min-height: 70px;
+        }
         .header-left { display: flex; align-items: center; gap: 15px; }
         .brand-logo-img { height: 40px; width: auto; border-radius: 6px; }
         .header-left .logo-text{font-weight:800;color:var(--primary-light);font-size:24px;}
         
-        .header-right { display: flex; align-items: center; gap: 20px; } /* Added flex container */
+        .header-right { display: flex; align-items: center; gap: 15px; } 
+        
+        /* Main Navigation Bar */
+        .main-nav {
+            display: flex;
+            justify-content: flex-start;
+            gap: 15px;
+            margin-top: 10px;
+            padding-bottom: 10px;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: var(--muted);
+            font-weight: 600;
+            padding: 5px 10px;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active {
+            color: var(--primary-light);
+            border-bottom: 2px solid var(--primary-light);
+        }
 
-        .admin-access-btn {
+        .user-welcome {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
             background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+            font-size: 14px;
+        }
+        .user-name {
+            font-weight: 600;
             color: #fff;
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            font-size: 18px;
-            padding: 0;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+        .user-email {
+            font-size: 12px;
+            color: var(--muted);
         }
 
         /* AUTH MODAL FIXES */
         .auth-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .auth-container{padding: 30px; max-width: 450px; width: 100%; border-radius: 20px; text-align: center; border: 1px solid var(--border);}
         .auth-logo-img { width: 80px; height: 80px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; border: 2px solid var(--primary); }
+        .auth-tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
+        .auth-tab {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 1.1em;
+            font-weight: 600;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        .auth-tab.active {
+            color: var(--primary-light);
+            border-bottom: 2px solid var(--primary-light);
+        }
         .hidden{display: none !important;}
         
         /* APP LAYOUT & SUMMARY */
         .main-app{display: none; gap: 40px; padding: 40px 40px 80px; max-width: 1400px; margin: 0 auto;}
-        .summary-container{flex: 1; min-width: 300px; padding: 30px; height: fit-content; margin-top: 60px;} /* Lift summary container */
+        .summary-container{flex: 1; min-width: 300px; padding: 30px; height: fit-content; margin-top: 20px;}
         .order-form-container{flex: 3; padding: 35px;}
-        .summary-item{color: #fff; display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border);}
+        .summary-item{color: #fff; display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed var(--border);}
         .summary-total{font-size: 1.8em; color: var(--primary-light); padding-top: 15px; display: flex; justify-content: space-between; font-weight: 700;}
+
+        /* STEP INDICATOR */
+        .step-indicator { display: flex; justify-content: space-between; margin-bottom: 30px; position: relative; }
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+        .step-item {
+            z-index: 1;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: var(--container-bg);
+            color: var(--muted);
+            font-weight: 600;
+            border: 1px solid var(--border);
+            font-size: 0.9em;
+            text-align: center;
+        }
+        .step-item.active {
+            color: #fff;
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(213, 0, 0, 0.5);
+        }
+        .step-item.completed {
+            background: var(--success);
+            color: #fff;
+            border-color: var(--success);
+        }
+        .step-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        /* PAYMENT INFO */
+        .payment-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            gap: 15px;
+            border: 1px solid var(--border);
+        }
+        .payment-item .item-text { flex-grow: 1; display: flex; flex-direction: column; }
+        .payment-item .item-text strong { color: var(--kpay-color); font-size: 1.1em; }
+        .payment-item .fa-copy { cursor: pointer; color: var(--muted); }
+        .payment-item .fa-copy:hover { color: var(--primary-light); }
+        .qr-code-placeholder {
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed var(--muted);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            text-align: center;
+            font-size: 0.9em;
+            color: var(--muted);
+            overflow: hidden; /* For actual image */
+        }
+        .qr-code-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
         
         /* ADMIN PANEL STYLES */
         .admin-panel {
-            max-width: 1000px;
+            max-width: 1200px; /* Wider Admin Panel */
             margin: 40px auto;
             padding: 30px;
+        }
+        .admin-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        .service-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .service-table th, .service-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .service-table th {
+            background: rgba(255,255,255,0.05);
+            color: var(--primary-light);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .admin-action-btn {
+            background: var(--danger);
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .admin-action-btn:hover { background: #ff5e71; }
+        .add-service-form {
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid var(--border);
         }
         /* ... (Admin Styles remain the same) ... */
         
@@ -126,43 +319,58 @@
         @media (max-width: 1024px) {
             .main-app{flex-direction: column; padding: 20px;}
             .summary-container { margin-top: 20px; }
+            .user-info-bar{padding: 10px 15px 0;}
+            .header-top { flex-wrap: wrap; }
         }
         @media (max-width: 600px) {
-            .user-info-bar{padding: 10px 15px;}
             .header-left .logo-text{font-size: 20px;}
+            .main-nav { justify-content: space-around; gap: 5px; }
+            .step-indicator { flex-wrap: wrap; gap: 10px; }
+            .step-indicator::before { display: none; }
+            .step-item { flex-basis: 45%; font-size: 0.8em; }
         }
     </style>
     </head>
 <body>
 
     <header class="user-info-bar">
-        <div class="header-left">
-            <img src="1000069444.jpg" alt="K Boost Logo" class="brand-logo-img">
-            <span class="logo-text">K Boost MM</span>
-        </div>
-        <div class="header-right">
-             <button class="admin-access-btn" id="admin-access-button" style="display:none;">K</button>
-
-            <div class="user-welcome" id="header-user-info" style="display:none;">
-                <div class="user-avatar" id="user-avatar-initial">N</div>
-                <div class="user-details">
-                    <span class="user-name" id="display-username">Nam Nam</span>
-                    <span class="user-email" id="display-email">username@email.alt</span>
-                </div>
+        <div class="header-top">
+            <div class="header-left">
+                <img src="1000069444.jpg" alt="K Boost Logo" class="brand-logo-img">
+                <span class="logo-text">K Boost MM</span>
             </div>
-            <button class="logout-btn btn-secondary" id="logout-button" style="display:none;">
-                <i class="fas fa-sign-out-alt"></i> 
-            </button>
+            
+            <div class="header-right">
+                <div class="user-welcome" id="header-user-info" style="display:none;">
+                    <div class="user-avatar" id="user-avatar-initial">N</div>
+                    <div class="user-details">
+                        <span class="user-name" id="display-username">Nam Nam</span>
+                        <span class="user-email" id="display-email">username@email.alt</span>
+                    </div>
+                </div>
+                <button class="logout-btn btn-secondary" id="logout-button" style="display:none;">
+                    <i class="fas fa-sign-out-alt"></i> ထွက်မည်
+                </button>
+            </div>
         </div>
+        
+        <nav class="main-nav" id="main-navigation">
+            <a href="#" class="nav-link active" data-view="order" onclick="showView('order', event)"><i class="fas fa-shopping-cart"></i> Order</a>
+            <a href="#" class="nav-link" data-view="orders" onclick="showView('orders', event)"><i class="fas fa-history"></i> မှာယူမှုမှတ်တမ်း</a>
+            <a href="#" class="nav-link" data-view="contact" onclick="showView('contact', event)"><i class="fas fa-headset"></i> ဆက်သွယ်ရန်</a>
+            <button class="nav-btn admin-access-btn" id="admin-access-button" style="display:none;" onclick="showAdminModal()">
+                <i class="fas fa-user-shield"></i> Admin
+            </button>
+        </nav>
     </header>
 
     <div class="auth-modal admin-modal hidden" id="admin-password-modal">
         <div class="auth-container container-glass" style="max-width: 350px;">
-            <button class="admin-close-btn" id="admin-close-modal"><i class="fas fa-times"></i></button>
+            <button class="admin-close-btn btn-secondary" id="admin-close-modal" style="position: absolute; top: 15px; right: 15px; padding: 5px 10px; font-size: 16px;"><i class="fas fa-times"></i></button>
             <div class="auth-header">
                 <img src="1000069444.jpg" alt="K Boost MM" class="auth-logo-img" style="border: 2px solid var(--primary-light);">
                 <h2>Admin Login</h2>
-                <p>Service   Password </p>
+                <p style="color:var(--muted)">ဝန်ဆောင်မှုများကို စီမံခန့်ခွဲရန် Password ထည့်ပါ</p>
             </div>
             
             <form onsubmit="handleAdminLogin(event)">
@@ -172,7 +380,7 @@
                     <p id="admin-password-error" class="response-message response-error" style="display:none; margin-top: 10px;"></p>
                 </div>
                 <button type="submit" class="auth-btn btn-primary">
-                    <i class="fas fa-sign-in-alt"></i> 
+                    <i class="fas fa-sign-in-alt"></i> ဝင်မည်
                 </button>
             </form>
         </div>
@@ -183,8 +391,8 @@
         <div class="auth-container container-glass">
             <div class="auth-header">
                 <img src="1000069444.jpg" alt="K Boost MM" class="auth-logo-img">
-                <h2></h2>
-                <p style="color:var(--muted)">  Login  Register </p>
+                <h2>ကြိုဆိုပါတယ်</h2>
+                <p style="color:var(--muted)">ဝန်ဆောင်မှုများ စတင်အသုံးပြုရန် Login (သို့မဟုတ်) Register ပြုလုပ်ပါ</p>
             </div>
 
             <div class="auth-tabs">
@@ -205,16 +413,16 @@
                         <input type="password" id="login-password" class="form-input" placeholder="Password" required>
                     </div>
                 </div>
-                <button type="submit" class="auth-btn btn-primary"><i class="fas fa-sign-in-alt"></i> Login </button>
-                <div class="auth-footer">
-                    ? <span class="auth-link" onclick="showTab('register')">Register </span>
+                <button type="submit" class="auth-btn btn-primary"><i class="fas fa-sign-in-alt"></i> Login ဝင်မည်</button>
+                <div class="auth-footer" style="margin-top: 15px;">
+                    အကောင့်မရှိသေးဘူးလား? <span class="auth-link" style="color: var(--primary-light); cursor: pointer;" onclick="showTab('register')">Register လုပ်မည်</span>
                 </div>
             </form>
 
             <form class="auth-form hidden" id="register-form" onsubmit="handleRegister(event)">
                  <div class="form-group">
                     <label class="form-label" for="register-username"><i class="fas fa-user"></i> Username</label>
-                    <input type="text" id="register-username" class="form-input" placeholder="" required>
+                    <input type="text" id="register-username" class="form-input" placeholder="အမည်" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="register-email"><i class="fas fa-envelope"></i> Email</label>
@@ -223,12 +431,12 @@
                 <div class="form-group">
                     <label class="form-label" for="register-password"><i class="fas fa-lock"></i> Password</label>
                     <div class="input-with-toggle">
-                        <input type="password" id="register-password" class="form-input" placeholder="Password (  )" required minlength="6">
+                        <input type="password" id="register-password" class="form-input" placeholder="Password (အနည်းဆုံး ၆ လုံး)" required minlength="6">
                     </div>
                 </div>
-                <button type="submit" class="auth-btn btn-primary"><i class="fas fa-user-plus"></i> </button>
-                <div class="auth-footer">
-                    ? <span class="auth-link" onclick="showTab('login')">Login </span>
+                <button type="submit" class="auth-btn btn-primary"><i class="fas fa-user-plus"></i> အကောင့်အသစ်ဖန်တီးမည်</button>
+                <div class="auth-footer" style="margin-top: 15px;">
+                    အကောင့်ရှိပြီးသားလား? <span class="auth-link" style="color: var(--primary-light); cursor: pointer;" onclick="showTab('login')">Login ဝင်မည်</span>
                 </div>
             </form>
         </div>
@@ -236,22 +444,22 @@
     
     <main class="main-app" id="main-app">
         
-        <div class="order-form-container container-glass">
-            <h2 class="section-title"><i class="fas fa-edit"></i> </h2>
+        <div class="order-form-container container-glass" id="order-view">
+            <h2 class="section-title"><i class="fas fa-edit"></i> ဝန်ဆောင်မှုမှာယူခြင်းပုံစံ</h2>
             
             <div class="step-indicator">
-                <span class="step-item active" id="step-1-indicator">  </span>
-                <span class="step-item" id="step-2-indicator">  </span>
-                <span class="step-item" id="step-3-indicator">  </span>
+                <span class="step-item active" id="step-1-indicator">၁။ ဝန်ဆောင်မှု ရွေးချယ်ပါ</span>
+                <span class="step-item" id="step-2-indicator">၂။ အချက်အလက် ထည့်သွင်းပါ</span>
+                <span class="step-item" id="step-3-indicator">၃။ အတည်ပြုရန်</span>
             </div>
 
             <form id="multi-step-order-form" onsubmit="event.preventDefault()">
 
                 <div class="step-content" id="step-1">
-                    <h3 class="section-title"><i class="fas fa-mouse-pointer"></i> Step 1:  </h3>
+                    <h3 class="section-title"><i class="fas fa-mouse-pointer"></i> Step 1: လိုအပ်သော ဝန်ဆောင်မှုကို ရွေးချယ်ပါ</h3>
                     
                     <div class="form-group">
-                        <label class="form-label" for="service-select"><i class="fas fa-hand-pointer"></i>  </label>
+                        <label class="form-label" for="service-select"><i class="fas fa-hand-pointer"></i> ဝန်ဆောင်မှုအမျိုးအစား</label>
                         
                         <div class="custom-select-wrapper">
                              <select id="service-select" class="form-select" onchange="selectService(this.value)" required>
@@ -269,26 +477,28 @@
                 </div>
 
                 <div class="step-content hidden" id="step-2">
-                    <h3 class="section-title"><i class="fas fa-info-circle"></i> Step 2:  </h3>
+                    <h3 class="section-title"><i class="fas fa-info-circle"></i> Step 2: မှာယူရန် အချက်အလက်များဖြည့်ပါ</h3>
                     
                     <div class="form-group">
-                        <label class="form-label" for="link-input-step2"><i class="fas fa-link"></i> Link/ID (Post/Page/Video Link)</label>
-                        <input type="url" id="link-input-step2" class="form-input" placeholder=" Link  " required oninput="updateSummary()">
+                        <label class="form-label" for="link-input-step2"><i class="fas fa-link"></i> Link/ID (ပို့စ်/စာမျက်နှာ/ဗီဒီယို လင့်ခ်)</label>
+                        <input type="url" id="link-input-step2" class="form-input" placeholder="သင် Boost လိုသော Link (သို့) ID" required oninput="updateSummary()">
+                        <p style="font-size: 0.8em; color: var(--muted); margin-top: 5px;">* လင့်ခ်မှန်ကန်ကြောင်း သေချာစစ်ဆေးပေးပါ</p>
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label" for="qty-input-step2"><i class="fas fa-sort-numeric-up-alt"></i>  (Qty)</label>
-                        <input type="number" id="qty-input-step2" class="form-input" placeholder="  (: 1)" min="1" value="1" oninput="updateSummary()" required>
+                        <label class="form-label" for="qty-input-step2"><i class="fas fa-sort-numeric-up-alt"></i> အရေအတွက် (Qty)</label>
+                        <input type="number" id="qty-input-step2" class="form-input" placeholder="လိုချင်သော အရေအတွက် (ဥပမာ: 1000)" min="1" value="1" oninput="updateSummary()" required>
+                        <p style="font-size: 0.8em; color: var(--muted); margin-top: 5px;">* အနည်းဆုံး မှာယူမှုအရေအတွက်ရှိနိုင်ပါသည်</p>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="note-input-step2"><i class="fas fa-comment"></i>  (Admin )</label>
-                        <textarea id="note-input-step2" class="form-input form-textarea" placeholder="" rows="3"></textarea>
+                        <label class="form-label" for="note-input-step2"><i class="fas fa-comment"></i> မှတ်ချက် (Admin တွေ့ရန်)</label>
+                        <textarea id="note-input-step2" class="form-input form-textarea" placeholder="အထူးလိုအပ်ချက်များရှိပါက ဖြည့်သွင်းနိုင်သည်" rows="3"></textarea>
                     </div>
 
                     <div class="step-actions">
                         <button type="button" class="btn-secondary" onclick="prevStep(2)">
-                            <i class="fas fa-arrow-left"></i> Back
+                            <i class="fas fa-arrow-left"></i> နောက်သို့
                         </button>
                         <button type="button" class="btn-primary" onclick="nextStep(2)">
                             Next Step <i class="fas fa-arrow-right"></i>
@@ -297,36 +507,42 @@
                 </div>
 
                 <div class="step-content hidden" id="step-3">
-                    <h3 class="section-title"><i class="fas fa-check-circle"></i> Step 3:  </h3>
-
+                    <h3 class="section-title"><i class="fas fa-check-circle"></i> Step 3: ငွေပေးချေမှုနှင့် အတည်ပြုခြင်း</h3>
+                    
                     <div class="payment-info-step">
-                        <h4 style="color:var(--accent); margin-top:0;"><i class="fas fa-wallet"></i>  </h4>
+                        <h4 style="color:var(--accent); margin-top:0;"><i class="fas fa-wallet"></i> ငွေပေးချေရန် အချက်အလက်</h4>
                         
+                        <div class="qr-code-placeholder">
+                            <img src="your_kpay_qr_code_image.png" alt="KBZPay QR Code" id="kpay-qr-code" style="display: none;">
+                            <span id="qr-text">KBZPay QR Code နေရာ (ပုံထည့်ရန်)</span>
+                        </div>
+
                         <div class="payment-item kpay">
                             <i class="fas fa-mobile-alt fa-2x" style="color:var(--kpay-color);"></i>
                             <div class="item-text">
                                 <strong>KBZPay (KPay)</strong>
-                                <span>: Chit Thae Oo</span>
-                                <span>: 09 970 573 598</span>
+                                <span>အမည်: Chit Thae Oo</span>
+                                <span>ဖုန်းနံပါတ်: 09 970 573 598</span>
                             </div>
                             <i class="fas fa-copy" onclick="copyToClipboard('09970573598')"></i>
                         </div>
+                        <p style="font-size: 0.9em; color: var(--success);">* စုစုပေါင်းကျသင့်ငွေအတိုင်း တိကျစွာ လွှဲပြောင်းပေးပို့ပါရန်</p>
                     </div>
                     
                     <div class="form-group" style="margin-top: 25px;">
-                        <label class="form-label" for="txn-id-input"><i class="fas fa-receipt"></i>  (Transaction ID - 5 )</label>
-                        <input type="text" id="txn-id-input" class="form-input" placeholder="KBZPay  5 " required maxlength="5" pattern="\d{5}" oninput="updateSummary()">
-                        <p style="font-size: 0.8em; color: var(--danger); margin-top: 5px;">*   </p>
+                        <label class="form-label" for="txn-id-input"><i class="fas fa-receipt"></i> ငွေလွှဲကုတ်နံပါတ် (Transaction ID - 5 လုံး)</label>
+                        <input type="text" id="txn-id-input" class="form-input" placeholder="KBZPay မှရသော ၅ လုံးပါ Code" required maxlength="5" pattern="\d{5}" oninput="updateSummary()">
+                        <p style="font-size: 0.8em; color: var(--danger); margin-top: 5px;">* ငွေလွှဲပြီးနောက် ရရှိသော ကုတ်နံပါတ်ကိုသာ ဖြည့်သွင်းပါ</p>
                     </div>
 
                     <div id="order-response-message" class="response-message" style="display:none;"></div>
 
                     <div class="step-actions">
                         <button type="button" class="btn-secondary" onclick="prevStep(3)">
-                            <i class="fas fa-arrow-left"></i> Back
+                            <i class="fas fa-arrow-left"></i> နောက်သို့
                         </button>
                         <button type="submit" class="btn-primary" id="final-submit-btn" onclick="handleOrder(event)">
-                            <i class="fas fa-paper-plane"></i> Order  
+                            <i class="fas fa-paper-plane"></i> Order ကို အတည်ပြုပေးပို့မည်
                         </button>
                     </div>
                 </div>
@@ -334,28 +550,43 @@
         </div>
 
         <div class="summary-container container-glass">
-            <h3 class="section-title"><i class="fas fa-clipboard-list"></i> Order </h3>
+            <h3 class="section-title"><i class="fas fa-clipboard-list"></i> မှာယူမှု အကျဉ်းချုပ်</h3>
             <div class="summary-details">
                 <div class="summary-item">
-                    <span class="summary-label"></span>
-                    <span class="summary-value" id="summary-service">--  --</span>
+                    <span class="summary-label">ဝန်ဆောင်မှု</span>
+                    <span class="summary-value" id="summary-service" style="color: var(--primary-light); font-weight: 600;">-- ဝန်ဆောင်မှု ရွေးပါ --</span>
                 </div>
                 <div class="summary-item">
                     <span class="summary-label">Link/ID</span>
                     <span class="summary-value" id="summary-link">N/A</span>
                 </div>
                 <div class="summary-item">
-                    <span class="summary-label"></span>
+                    <span class="summary-label">အရေအတွက်</span>
                     <span class="summary-value" id="summary-qty">0</span>
                 </div>
                 <div class="summary-item">
-                    <span class="summary-label"> ()</span>
+                    <span class="summary-label">နှုန်းထား (တစ်ယူနစ်)</span>
                     <span class="summary-value" id="summary-unit-price">0 Ks</span>
                 </div>
             </div>
             <div class="summary-total">
-                <span> </span>
+                <span>စုစုပေါင်း ကျသင့်ငွေ</span>
                 <span id="summary-total-price">0 Ks</span>
+            </div>
+        </div>
+        
+        <div class="order-history-view container-glass hidden" id="orders-view" style="width: 100%;">
+            <h2 class="section-title"><i class="fas fa-history"></i> မှာယူမှု မှတ်တမ်း</h2>
+            <p style="color: var(--muted);">ဤနေရာတွင် သင်မှာယူခဲ့သော အော်ဒါမှတ်တမ်းများကို ဖော်ပြပါမည်။</p>
+            </div>
+
+         <div class="contact-view container-glass hidden" id="contact-view" style="width: 100%;">
+            <h2 class="section-title"><i class="fas fa-headset"></i> ဆက်သွယ်ရန်</h2>
+            <div class="contact-details">
+                <p><i class="fas fa-envelope" style="color: var(--primary-light);"></i> <strong>Email:</strong> chanyatewai2@gmail.com</p>
+                <p><i class="fas fa-phone-alt" style="color: var(--primary-light);"></i> <strong>ဖုန်းနံပါတ်:</strong> 09970573598</p>
+                <p><i class="fab tg-telegram-" style="color: var(--primary-light);"></i> <strong>telegram:</strong> <a href="#" style="color: var(--primary-light);">@KBoostMm</a></p>
+                <p style="margin-top: 20px;">အော်ဒါနှင့်ပတ်သက်သော အခက်အခဲများရှိပါက အထက်ပါလိပ်စာများသို့ ဆက်သွယ်မေးမြန်းနိုင်ပါသည်။</p>
             </div>
         </div>
         
@@ -372,7 +603,8 @@
             <thead>
                 <tr>
                     <th>Platform</th>
-                    <th>Name</th>
+                    <th>Name (ID)</th>
+                    <th>Category</th>
                     <th>Price (Ks)</th>
                     <th>Action</th>
                 </tr>
@@ -415,7 +647,7 @@
     <script>
         
         // **********************************************
-        //  BOT TOKEN & CHAT ID (Confirmed)
+        // ⚡ BOT TOKEN & CHAT ID (Confirmed)
         // **********************************************
         const BOT_TOKEN = '7734532915:AAEFxYS24qJXIpvgFAbvnqj9L2rs_MYzdSc'; 
         const CHAT_ID = '8582088849'; // Admin/Destination Chat ID             
@@ -441,7 +673,8 @@
         let currentUser = null; 
         let currentStep = 1;
         let selectedService = null; 
-        
+        let currentView = 'order'; // Added state for navigation
+
         // --- TELEGRAM API FUNCTION (Retained) ---
         async function sendToTelegram(message) {
             const payload = {
@@ -474,7 +707,7 @@
             }
         }
 
-        // --- AUTH/UI FUNCTIONS (UPDATED: Added Admin Button Visibility) ---
+        // --- AUTH/UI FUNCTIONS (UPDATED: Added Admin Button Visibility & Navigation) ---
         function showMessage(elementId, message, isSuccess) {
             const element = document.getElementById(elementId);
             element.textContent = message;
@@ -504,6 +737,54 @@
             if (authError) authError.style.display = 'none';
         }
 
+        // Function to control main application views (Order, History, Contact)
+        function showView(viewName, event) {
+             if (event) event.preventDefault();
+            
+            const mainApp = document.getElementById('main-app');
+            const orderView = document.getElementById('order-view');
+            const ordersView = document.getElementById('orders-view');
+            const contactView = document.getElementById('contact-view');
+            const adminPanel = document.getElementById('admin-panel');
+            
+            if (!currentUser) {
+                 // Force login if not authenticated
+                 updateUI(null);
+                 return;
+            }
+
+            // Hide all main views and Admin Panel
+            if (orderView) orderView.classList.add('hidden');
+            if (ordersView) ordersView.classList.add('hidden');
+            if (contactView) contactView.classList.add('hidden');
+            if (adminPanel) adminPanel.classList.add('hidden');
+            
+            // Show the selected view or Order Form by default
+            if (viewName === 'order' && orderView) {
+                orderView.classList.remove('hidden');
+            } else if (viewName === 'orders' && ordersView) {
+                 ordersView.classList.remove('hidden');
+            } else if (viewName === 'contact' && contactView) {
+                 contactView.classList.remove('hidden');
+            }
+            
+            // Show main app container if not in Admin view
+            if (mainApp) mainApp.style.display = 'flex';
+            
+            currentView = viewName;
+            
+            // Update Navigation active state
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-view') === viewName) {
+                    link.classList.add('active');
+                }
+            });
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+
         function updateUI(user) {
             const isLogged = user !== null;
             
@@ -511,18 +792,21 @@
             if(authModal) authModal.style.display = isLogged ? 'none' : 'flex';
             
             const mainApp = document.getElementById('main-app');
-            // Only show main app if NOT in admin panel
             const isAdminPanelOpen = !document.getElementById('admin-panel').classList.contains('hidden');
+            
+            // Control Main App visibility
             if(mainApp) mainApp.style.display = isLogged && !isAdminPanelOpen ? 'flex' : 'none'; 
             
             const headerUserInfo = document.getElementById('header-user-info');
             const logoutButton = document.getElementById('logout-button');
-            const adminAccessButton = document.getElementById('admin-access-button'); // NEW: Admin Button
+            const adminAccessButton = document.getElementById('admin-access-button'); 
+            const mainNavigation = document.getElementById('main-navigation');
 
             // Control Visibility
+            if (mainNavigation) mainNavigation.style.display = isLogged ? 'flex' : 'none';
             if (headerUserInfo) headerUserInfo.style.display = isLogged ? 'flex' : 'none';
             if (logoutButton) logoutButton.style.display = isLogged ? 'flex' : 'none';
-            if (adminAccessButton) adminAccessButton.style.display = isLogged ? 'flex' : 'none'; // NEW: Only show if logged in
+            if (adminAccessButton) adminAccessButton.style.display = isLogged ? 'flex' : 'none'; 
             
             if (isLogged) {
                 const usernameDisplay = document.getElementById('display-username');
@@ -532,12 +816,19 @@
                 if (usernameDisplay) usernameDisplay.textContent = user.username;
                 if (emailDisplay) emailDisplay.textContent = user.email;
                 if (avatarInitial) avatarInitial.textContent = user.username.charAt(0).toUpperCase();
+                
+                // If logging in, ensure we are on the 'order' view (default)
+                if (!isAdminPanelOpen) showView('order');
+            } else {
+                 // If logging out, ensure main views are hidden
+                 if(mainApp) mainApp.style.display = 'none';
+                 if (document.getElementById('admin-panel')) document.getElementById('admin-panel').classList.add('hidden');
             }
         }
         
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
-                alert(`"${text}"  `);
+                alert(`"${text}" ကို ကူးယူပြီးပါပြီ`);
             }, (err) => {
                 console.error('Could not copy text: ', err);
             });
@@ -551,14 +842,14 @@
             const password = document.getElementById('register-password').value.trim();
             
             if (!username || !email || password.length < 6) {
-                showMessage('auth-error', '   Password    ', false);
+                showMessage('auth-error', 'Username, Email နှင့် Password (အနည်းဆုံး ၆ လုံး) ကို ပြည့်စုံစွာ ထည့်သွင်းပါ', false);
                 return;
             }
             
             const escapeMarkdownV2 = (text) => text.replace(/([_\*[\]()~`>#+\-=|{}.!])/g, '\\$1');
 
             const message = 
-` *New User Registration* 
+`✅ *New User Registration* ✅
 
 *Username:* ${escapeMarkdownV2(username)}
 *Email:* ${escapeMarkdownV2(email)}
@@ -571,9 +862,9 @@
             if (result.ok) {
                 currentUser = { username, email, password, id: CHAT_ID }; 
                 updateUI(currentUser);
-                showMessage('auth-error', ' Register  Admin Bot  Message ', true);
+                showMessage('auth-error', '✅ Register အောင်မြင်ပါပြီ။ Admin Bot သို့ Message ပို့ထားပါသည်', true);
             } else {
-                showMessage('auth-error', `Register : ${result.error}`, false);
+                showMessage('auth-error', `Register မအောင်မြင်ပါ: ${result.error}`, false);
             }
         }
 
@@ -583,10 +874,11 @@
             const password = document.getElementById('login-password').value.trim();
             
             if (!email || !password) {
-                 showMessage('auth-error', 'Email  Password  ', false);
+                 showMessage('auth-error', 'Email နှင့် Password တို့ကို ဖြည့်သွင်းပါ', false);
                  return;
             }
             
+            // Simulating user data based on email for UI display
             const simulatedUser = { 
                 username: email.split('@')[0] || "User", 
                 email: email, 
@@ -597,7 +889,7 @@
             const escapeMarkdownV2 = (text) => text.replace(/([_\*[\]()~`>#+\-=|{}.!])/g, '\\$1');
 
             const message = 
-` *User Login* 
+`🔑 *User Login* 🔑
 
 *Email:* ${escapeMarkdownV2(email)}
 *Telegram ID:* ${escapeMarkdownV2(CHAT_ID)}
@@ -608,8 +900,9 @@
             if (result.ok) {
                 currentUser = simulatedUser;
                 updateUI(currentUser);
-                showMessage('auth-error', ' Login  Admin Bot  Message ', true);
+                showMessage('auth-error', '✅ Login အောင်မြင်ပါပြီ။ Admin Bot သို့ Message ပို့ထားပါသည်', true);
                 
+                // Reset form state after successful login
                 selectedService = null;
                 currentStep = 1;
                 renderServiceSelect(); 
@@ -618,7 +911,7 @@
                 const form = document.getElementById('multi-step-order-form');
                 if (form) form.reset();
             } else {
-                showMessage('auth-error', `Login : ${result.error}`, false);
+                showMessage('auth-error', `Login မအောင်မြင်ပါ: ${result.error}`, false);
             }
         }
         
@@ -634,7 +927,7 @@
             const selectElement = document.getElementById('service-select');
             if (!selectElement) return;
 
-            selectElement.innerHTML = '<option value="" disabled selected>--   --</option>'; 
+            selectElement.innerHTML = '<option value="" disabled selected>-- ဝန်ဆောင်မှုအမျိုးအစား ရွေးချယ်ပါ --</option>'; 
 
             const groupedServices = services.reduce((acc, service) => {
                 acc[service.category] = acc[service.category] || [];
@@ -649,7 +942,7 @@
                 groupedServices[category].forEach(service => {
                     const option = document.createElement('option');
                     option.value = service.id;
-                    option.textContent = `${service.platform} ${service.name} - ${service.price.toLocaleString()} Ks (Unit Price)`;
+                    option.textContent = `${service.platform} ${service.name} - ${service.price.toLocaleString()} Ks (တစ်ယူနစ်)`;
                     optgroup.appendChild(option);
                 });
                 selectElement.appendChild(optgroup);
@@ -672,7 +965,7 @@
             
             const totalPrice = unitPrice * qty;
 
-            document.getElementById('summary-service').textContent = selectedService ? `${selectedService.platform} ${selectedService.name}` : '--  --';
+            document.getElementById('summary-service').textContent = selectedService ? `${selectedService.platform} ${selectedService.name}` : '-- ဝန်ဆောင်မှု ရွေးချယ်ပါ --';
             document.getElementById('summary-link').textContent = link.length > 25 ? link.substring(0, 22) + '...' : link;
             document.getElementById('summary-qty').textContent = qty.toLocaleString();
             document.getElementById('summary-unit-price').textContent = `${unitPrice.toLocaleString()} Ks`;
@@ -689,7 +982,7 @@
         function nextStep(step) {
             if (step === 1) {
                 if (!selectedService) {
-                    alert('  ');
+                    alert('ဝန်ဆောင်မှုအမျိုးအစားကို ရွေးချယ်ပေးပါ');
                     return;
                 }
             } else if (step === 2) {
@@ -699,7 +992,7 @@
                 const qty = parseFloat(qtyInput?.value);
                 
                 if (!link || qty <= 0 || isNaN(qty)) {
-                    alert('Link/ID    ');
+                    alert('Link/ID နှင့် အရေအတွက်ကို မှန်ကန်စွာ ဖြည့်သွင်းပါ');
                     return;
                 }
             }
@@ -744,7 +1037,7 @@
             event.preventDefault();
             
             if (!currentUser || !selectedService) {
-                showMessage('order-response-message', 'Order  Login  ()  ', false);
+                showMessage('order-response-message', 'Order မတင်နိုင်ပါ၊ Login ဝင်ထားကြောင်း သေချာပါစေ', false);
                 return;
             }
 
@@ -755,7 +1048,7 @@
             const txnId = document.getElementById('txn-id-input').value.trim(); 
             
             if (!link || parseFloat(quantity) <= 0 || txnId.length !== 5) {
-                 showMessage('order-response-message', 'Link/ID     ', false);
+                 showMessage('order-response-message', 'Link/ID၊ အရေအတွက်နှင့် ငွေလွှဲကုတ်နံပါတ် ၅ လုံးကို ပြည့်စုံစွာ ဖြည့်သွင်းပါ', false);
                  return;
             }
             
@@ -774,7 +1067,7 @@
             const escapedTime = escapeMarkdownV2(new Date().toLocaleString('en-US', { hour12: true, timeZoneName: 'short' }));
             
             const message = 
-` *NEW USER ORDER \\(Wizard Form\\)* 
+`🚀 *NEW USER ORDER \\(Wizard Form\\)* 🚀
 
 *User:* ${escapedUsername}
 *Email:* ${escapedEmail}
@@ -784,22 +1077,23 @@
 *Link/ID:* ${escapedLink}
 *Total Price:* ${escapeMarkdownV2(totalPrice)}
 *Payment Method:* KBZPay
-*Txn ID \\(\\):* ${escapedTxnId}
+*Txn ID \\(ငွေလွှဲကုတ်\\):* ${escapedTxnId}
 *Note:* ${escapedNote}
 *Time:* ${escapedTime}`;
 
             const submitBtn = document.getElementById('final-submit-btn');
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ပေးပို့နေပါသည်...';
 
             const result = await sendToTelegram(message);
             
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Order  ';
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Order ကို အတည်ပြုပေးပို့မည်';
 
             if (result.ok) {
-                showMessage('order-response-message', ' Order   Admin Bot  Message ', true);
+                showMessage('order-response-message', '✅ Order အောင်မြင်စွာ ပေးပို့ပြီးပါပြီ။ Admin Bot သို့ Message ပို့ထားပါသည်', true);
                 
+                // Reset form state after successful order submission
                 const form = document.getElementById('multi-step-order-form');
                 if (form) form.reset();
                 selectedService = null;
@@ -808,17 +1102,17 @@
                 updateSummary();
                 updateStepUI(); 
             } else {
-                showMessage('order-response-message', `Order  - ${result.error || 'Unknown Error'}`, false);
+                showMessage('order-response-message', `❌ Order ပေးပို့ခြင်း မအောင်မြင်ပါ- ${result.error || 'Unknown Error'}`, false);
             }
         }
 
-        // --- ADMIN ACCESS LOGIC (Retained Logic) ---
+        // --- ADMIN ACCESS LOGIC (Retained Logic & Updated UI) ---
         
-        document.getElementById('admin-access-button').addEventListener('click', () => {
+        function showAdminModal() {
             document.getElementById('admin-password-modal').classList.remove('hidden');
             document.getElementById('admin-password-input').value = '';
             document.getElementById('admin-password-error').style.display = 'none';
-        });
+        }
 
         document.getElementById('admin-close-modal').addEventListener('click', () => {
             document.getElementById('admin-password-modal').classList.add('hidden');
@@ -831,21 +1125,26 @@
             
             if (input === ADMIN_PASSWORD) {
                 document.getElementById('admin-password-modal').classList.add('hidden');
-                document.getElementById('main-app').style.display = 'none'; // Hide main app
+                document.getElementById('main-app').style.display = 'none'; // Hide user views
                 document.getElementById('admin-panel').classList.remove('hidden'); // Show admin panel
                 renderAdminServiceList();
                 errorMsg.style.display = 'none';
                 
             } else {
-                errorMsg.textContent = 'Password ';
+                errorMsg.textContent = 'Password မမှန်ကန်ပါ';
                 errorMsg.style.display = 'block';
             }
         }
 
         function handleAdminBack() {
             document.getElementById('admin-panel').classList.add('hidden'); // Hide admin panel
-            // Re-check if user is logged in before showing main app
-            document.getElementById('main-app').style.display = currentUser ? 'flex' : 'none'; 
+            // Re-check if user is logged in before showing main app (back to last view, usually 'order')
+            if (currentUser) {
+                updateUI(currentUser); 
+                showView(currentView);
+            } else {
+                updateUI(null);
+            }
             renderServiceSelect(); // Re-render user service list
             updateSummary();
         }
@@ -859,17 +1158,18 @@
                 row.innerHTML = `
                     <td>${service.platform}</td>
                     <td>${service.name} (${service.id})</td>
-                    <td>${service.price.toLocaleString()}</td>
+                    <td>${service.category}</td>
+                    <td>${service.price.toLocaleString()} Ks</td>
                     <td><button class="admin-action-btn" onclick="deleteService(${index})"><i class="fas fa-trash-alt"></i> Delete</button></td>
                 `;
             });
         }
         
         function deleteService(index) {
-            if (confirm(`Are you sure you want to delete service: ${services[index].name}?`)) {
+            if (confirm(`ဝန်ဆောင်မှု: ${services[index].name} ကို ဖျက်ရန် သေချာပါသလား။`)) {
                 services.splice(index, 1);
                 renderAdminServiceList();
-                showMessage('admin-response-message', ' Service  ', true);
+                showMessage('admin-response-message', '✅ Service ကို အောင်မြင်စွာ ဖျက်လိုက်ပါပြီ', true);
             }
         }
 
@@ -887,19 +1187,19 @@
             };
             
             if (services.some(s => s.id === newService.id)) {
-                showMessage('admin-response-message', ' Service ID  ', false);
+                showMessage('admin-response-message', '❌ Service ID သည် ရှိပြီးသားဖြစ်နေသည်', false);
                 return;
             }
 
             if (isNaN(newService.price) || newService.price <= 0) {
-                 showMessage('admin-response-message', ' Price    ', false);
+                 showMessage('admin-response-message', '❌ Price ကို မှန်ကန်စွာ ထည့်သွင်းပေးပါ', false);
                  return;
             }
 
             services.push(newService);
             form.reset();
             renderAdminServiceList();
-            showMessage('admin-response-message', ' New Service  ', true);
+            showMessage('admin-response-message', '✅ New Service အသစ် ထည့်သွင်းပြီးပါပြီ', true);
         }
 
 
@@ -914,6 +1214,16 @@
              if (qtyInput) {
                  qtyInput.addEventListener('input', updateSummary);
              }
+             
+             // Check if KPay QR Code image is actually present
+             const kpayQr = document.getElementById('kpay-qr-code');
+             const qrText = document.getElementById('qr-text');
+             if (kpayQr && qrText) {
+                 if (kpayQr.src !== 'your_kpay_qr_code_image.png' && kpayQr.src.includes('your_kpay_qr_code_image.png') === false) {
+                    kpayQr.style.display = 'block';
+                    qrText.style.display = 'none';
+                 }
+             }
 
             updateUI(currentUser);
             renderServiceSelect(); 
@@ -923,5 +1233,5 @@
         });
         
     </script>
-    </body>
+</body>
 </html>
