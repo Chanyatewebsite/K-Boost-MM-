@@ -1,1234 +1,269 @@
-<!DOCT<DOCTYPE html>
+<!DOCTYPE html>
 <html lang="my">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>⚡ K Boost MM </title>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K-BOOST SMM | WALLET SYSTEM</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* BASE STYLES & VARIABLES (Slightly enhanced dark theme) */
-        :root{
-            --primary: #D50000; /* Red */
-            --primary-light: #FF5252; /* Lighter Red */
-            --accent: #FF1744; /* Bright Red Accent */
-            --success: #00E676;
-            --danger: #ff3d57;
-            --dark-bg: #0A0A0A; /* Deep Black */
-            --container-bg: rgba(25, 25, 25, 0.95); /* Darker, more solid container */
-            --card-bg: rgba(255, 255, 255, 0.05); /* Slightly transparent card */
-            --border: rgba(255,255,255,0.1);
-            --muted: rgba(255,255,255,0.6);
-            --kpay-color: #32cd32;
-        }
-
-        *, *:before, *:after{box-sizing:border-box; transition:0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);}
-        html,body{
-            height:100%;margin:0;
-            font-family:'Poppins', 'Padauk', sans-serif;
-            font-size: 16px; /* Base Font Size */
-            background:linear-gradient(180deg, var(--dark-bg) 0%, #1c1c1c 100%);
-            color:#fff;-webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-        }
-
-        /* Myanmar Font Specific Enhancements */
-        body, .form-input, .form-textarea, .form-select, .response-message {
-            /* Prioritize Padauk for better Myanmar readability */
-            font-family: 'Padauk', 'Poppins', sans-serif; 
-        }
-        .header-left .logo-text, h1, h2, h3, h4, .btn-primary, .auth-btn {
-             /* Use Poppins for bolder titles and buttons */
-            font-family: 'Poppins', 'Padauk', sans-serif; 
-        }
-
-        /* UTILITIES & BASE COMPONENTS */
-        .section-title{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--primary-light);margin-bottom:20px; font-size: 1.4em;} /* Increased size */
-        .container-glass{
-            background: var(--container-bg);
-            border: 1px solid var(--border);
-            border-radius: 15px; /* Slightly smoother corners */
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 10px rgba(255, 0, 0, 0.1); /* Deeper shadow with subtle glow */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-        
-        /* FORM ELEMENTS */
-        .form-group{margin-bottom: 25px;}
-        .form-label{display:block;font-weight:600;font-size:16px;margin-bottom:8px;color:var(--muted);display:flex;gap:8px;align-items:center;} /* Increased size for Myanmar text */
-        .form-input, .form-textarea, .form-select{
-            width:100%;padding:15px 18px;border-radius:10px; 
-            border:1px solid rgba(255,255,255,0.15);
-            background:rgba(255,255,255,0.05); 
-            color:#fff;font-size:16px;outline:none;
-        }
-        .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
-        .form-select { -webkit-appearance: none; -moz-appearance: none; appearance: none; cursor: pointer; padding-right: 45px; }
-        .custom-select-wrapper{position: relative;}
-        .custom-select-icon {position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--primary-light); pointer-events: none; font-size: 1.2em;}
-        .form-select option {background: var(--dark-bg); color: #fff; padding: 10px;}
-        
-        /* BUTTON STYLES */
-        .btn-primary, .btn-secondary, .admin-access-btn, .admin-submit-btn, .nav-btn{
-            padding: 12px 20px;border-radius: 10px; 
-            border: none;cursor: pointer;
-            font-weight: 700;display: flex;align-items: center;justify-content: center;
-            gap: 8px;text-decoration: none;
-            white-space: nowrap; 
-        }
-        .btn-primary{
-            background: linear-gradient(135deg, var(--primary), #FF5252);
-            color: #fff;box-shadow: 0 5px 20px rgba(213, 0, 0, 0.5);
-        }
-        .btn-primary:hover{transform: translateY(-2px); box-shadow: 0 8px 25px rgba(213, 0, 0, 0.7);}
-        .btn-secondary { background: rgba(255,255,255,0.1); color: var(--primary-light); border: 1px solid var(--border); }
-        .btn-secondary:hover { background: rgba(255,255,255,0.2); color: #fff; }
-        .btn-primary:disabled, .admin-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        /* HEADER & NAVIGATION REFINEMENT */
-        .user-info-bar{
-            position: sticky; top: 0; left: 0; right: 0; 
-            display: flex; flex-direction: column; /* Changed to column for better responsiveness on top */
-            padding: 10px 30px 0; 
-            background: rgba(10, 10, 10, 0.95);
-            border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(10px);
-            z-index: 999;
-        }
-        .header-top {
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between;
-            min-height: 70px;
-        }
-        .header-left { display: flex; align-items: center; gap: 15px; }
-        .brand-logo-img { height: 40px; width: auto; border-radius: 6px; }
-        .header-left .logo-text{font-weight:800;color:var(--primary-light);font-size:24px;}
-        
-        .header-right { display: flex; align-items: center; gap: 15px; } 
-        
-        /* Main Navigation Bar */
-        .main-nav {
-            display: flex;
-            justify-content: flex-start;
-            gap: 15px;
-            margin-top: 10px;
-            padding-bottom: 10px;
-        }
-        .nav-link {
-            text-decoration: none;
-            color: var(--muted);
-            font-weight: 600;
-            padding: 5px 10px;
-            border-bottom: 2px solid transparent;
-        }
-        .nav-link.active {
-            color: var(--primary-light);
-            border-bottom: 2px solid var(--primary-light);
-        }
-
-        .user-welcome {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .user-avatar {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 16px;
-        }
-        .user-details {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
-            font-size: 14px;
-        }
-        .user-name {
-            font-weight: 600;
-            color: #fff;
-        }
-        .user-email {
-            font-size: 12px;
-            color: var(--muted);
-        }
-
-        /* AUTH MODAL FIXES */
-        .auth-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .auth-container{padding: 30px; max-width: 450px; width: 100%; border-radius: 20px; text-align: center; border: 1px solid var(--border);}
-        .auth-logo-img { width: 80px; height: 80px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; border: 2px solid var(--primary); }
-        .auth-tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
-        .auth-tab {
-            background: none;
-            border: none;
-            color: var(--muted);
-            font-size: 1.1em;
-            font-weight: 600;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-        }
-        .auth-tab.active {
-            color: var(--primary-light);
-            border-bottom: 2px solid var(--primary-light);
-        }
-        .hidden{display: none !important;}
-        
-        /* APP LAYOUT & SUMMARY */
-        .main-app{display: none; gap: 40px; padding: 40px 40px 80px; max-width: 1400px; margin: 0 auto;}
-        .summary-container{flex: 1; min-width: 300px; padding: 30px; height: fit-content; margin-top: 20px;}
-        .order-form-container{flex: 3; padding: 35px;}
-        .summary-item{color: #fff; display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed var(--border);}
-        .summary-total{font-size: 1.8em; color: var(--primary-light); padding-top: 15px; display: flex; justify-content: space-between; font-weight: 700;}
-
-        /* STEP INDICATOR */
-        .step-indicator { display: flex; justify-content: space-between; margin-bottom: 30px; position: relative; }
-        .step-indicator::before {
-            content: '';
-            position: absolute;
-            top: 15px;
-            left: 10%;
-            right: 10%;
-            height: 2px;
-            background: var(--border);
-            z-index: 0;
-        }
-        .step-item {
-            z-index: 1;
-            padding: 8px 15px;
-            border-radius: 20px;
-            background: var(--container-bg);
-            color: var(--muted);
-            font-weight: 600;
-            border: 1px solid var(--border);
-            font-size: 0.9em;
-            text-align: center;
-        }
-        .step-item.active {
-            color: #fff;
-            background: var(--primary);
-            border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(213, 0, 0, 0.5);
-        }
-        .step-item.completed {
-            background: var(--success);
-            color: #fff;
-            border-color: var(--success);
-        }
-        .step-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-        }
-
-        /* PAYMENT INFO */
-        .payment-item {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            gap: 15px;
-            border: 1px solid var(--border);
-        }
-        .payment-item .item-text { flex-grow: 1; display: flex; flex-direction: column; }
-        .payment-item .item-text strong { color: var(--kpay-color); font-size: 1.1em; }
-        .payment-item .fa-copy { cursor: pointer; color: var(--muted); }
-        .payment-item .fa-copy:hover { color: var(--primary-light); }
-        .qr-code-placeholder {
-            width: 150px;
-            height: 150px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px dashed var(--muted);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px auto;
-            text-align: center;
-            font-size: 0.9em;
-            color: var(--muted);
-            overflow: hidden; /* For actual image */
-        }
-        .qr-code-placeholder img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        
-        /* ADMIN PANEL STYLES */
-        .admin-panel {
-            max-width: 1200px; /* Wider Admin Panel */
-            margin: 40px auto;
-            padding: 30px;
-        }
-        .admin-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border);
-        }
-        .service-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 14px;
-        }
-        .service-table th, .service-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-        .service-table th {
-            background: rgba(255,255,255,0.05);
-            color: var(--primary-light);
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-        .admin-action-btn {
-            background: var(--danger);
-            color: #fff;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .admin-action-btn:hover { background: #ff5e71; }
-        .add-service-form {
-            margin-top: 40px;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            border: 1px solid var(--border);
-        }
-        /* ... (Admin Styles remain the same) ... */
-        
-        /* Responsive Adjustments */
-        @media (max-width: 1024px) {
-            .main-app{flex-direction: column; padding: 20px;}
-            .summary-container { margin-top: 20px; }
-            .user-info-bar{padding: 10px 15px 0;}
-            .header-top { flex-wrap: wrap; }
-        }
-        @media (max-width: 600px) {
-            .header-left .logo-text{font-size: 20px;}
-            .main-nav { justify-content: space-around; gap: 5px; }
-            .step-indicator { flex-wrap: wrap; gap: 10px; }
-            .step-indicator::before { display: none; }
-            .step-item { flex-basis: 45%; font-size: 0.8em; }
-        }
+        :root { --primary: #00d2ff; --secondary: #ff007b; --bg: #0f172a; --card: #1e293b; }
+        body { font-family: 'Segoe UI', 'Padauk', sans-serif; background: var(--bg); color: white; margin: 0; padding-bottom: 70px; }
+        .container { max-width: 500px; margin: auto; padding: 15px; }
+        .hidden { display: none !important; }
+        .card { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid #334155; margin-bottom: 15px; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; background: #0f172a; color: white; border: 1px solid #334155; box-sizing: border-box; }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-main { background: var(--primary); color: #000; }
+        .btn-red { background: var(--secondary); color: white; }
+        .top-bar { background: rgba(0,0,0,0.7); padding: 15px; display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px); }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #111; display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid #333; }
+        .nav-link { color: #888; font-size: 0.75rem; text-align: center; cursor: pointer; text-decoration: none; }
+        .nav-link.active { color: var(--primary); }
+        .badge { padding: 4px 8px; border-radius: 5px; font-size: 11px; }
+        .wallet-box { background: linear-gradient(45deg, #00d2ff, #3a7bd5); padding: 15px; border-radius: 12px; text-align: center; color: #000; margin-bottom: 15px; }
     </style>
-    </head>
+</head>
 <body>
 
-    <header class="user-info-bar">
-        <div class="header-top">
-            <div class="header-left">
-                <img src="1000069444.jpg" alt="K Boost Logo" class="brand-logo-img">
-                <span class="logo-text">K Boost MM</span>
-            </div>
-            
-            <div class="header-right">
-                <div class="user-welcome" id="header-user-info" style="display:none;">
-                    <div class="user-avatar" id="user-avatar-initial">N</div>
-                    <div class="user-details">
-                        <span class="user-name" id="display-username">Nam Nam</span>
-                        <span class="user-email" id="display-email">username@email.alt</span>
-                    </div>
-                </div>
-                <button class="logout-btn btn-secondary" id="logout-button" style="display:none;">
-                    <i class="fas fa-sign-out-alt"></i> ထွက်မည်
-                </button>
-            </div>
-        </div>
-        
-        <nav class="main-nav" id="main-navigation">
-            <a href="#" class="nav-link active" data-view="order" onclick="showView('order', event)"><i class="fas fa-shopping-cart"></i> Order</a>
-            <a href="#" class="nav-link" data-view="orders" onclick="showView('orders', event)"><i class="fas fa-history"></i> မှာယူမှုမှတ်တမ်း</a>
-            <a href="#" class="nav-link" data-view="contact" onclick="showView('contact', event)"><i class="fas fa-headset"></i> ဆက်သွယ်ရန်</a>
-            <button class="nav-btn admin-access-btn" id="admin-access-button" style="display:none;" onclick="showAdminModal()">
-                <i class="fas fa-user-shield"></i> Admin
-            </button>
-        </nav>
-    </header>
+<div id="topNav" class="top-bar hidden">
+    <span><i class="fas fa-user-circle"></i> <b id="userDisplay"></b></span>
+    <button onclick="logout()" style="background:none; border:none; color:var(--secondary); font-weight:bold;">LOGOUT</button>
+</div>
 
-    <div class="auth-modal admin-modal hidden" id="admin-password-modal">
-        <div class="auth-container container-glass" style="max-width: 350px;">
-            <button class="admin-close-btn btn-secondary" id="admin-close-modal" style="position: absolute; top: 15px; right: 15px; padding: 5px 10px; font-size: 16px;"><i class="fas fa-times"></i></button>
-            <div class="auth-header">
-                <img src="1000069444.jpg" alt="K Boost MM" class="auth-logo-img" style="border: 2px solid var(--primary-light);">
-                <h2>Admin Login</h2>
-                <p style="color:var(--muted)">ဝန်ဆောင်မှုများကို စီမံခန့်ခွဲရန် Password ထည့်ပါ</p>
-            </div>
-            
-            <form onsubmit="handleAdminLogin(event)">
-                <div class="form-group">
-                    <label class="form-label" for="admin-password-input"><i class="fas fa-key"></i> Password</label>
-                    <input type="password" id="admin-password-input" class="form-input" placeholder="Admin Password" required>
-                    <p id="admin-password-error" class="response-message response-error" style="display:none; margin-top: 10px;"></p>
-                </div>
-                <button type="submit" class="auth-btn btn-primary">
-                    <i class="fas fa-sign-in-alt"></i> ဝင်မည်
-                </button>
-            </form>
+<div class="container">
+    <div id="authPanel">
+        <div class="card" style="text-align: center; margin-top: 50px;">
+            <h2>K-BOOST SMM</h2>
+            <input type="text" id="uIn" placeholder="Username">
+            <input type="password" id="pIn" placeholder="Password">
+            <button class="btn btn-main" onclick="login()">LOGIN / REGISTER</button>
         </div>
     </div>
 
-
-    <div class="auth-modal" id="auth-modal">
-        <div class="auth-container container-glass">
-            <div class="auth-header">
-                <h2>ကြိုဆိုပါတယ်</h2>
-                <p style="color:var(--muted)">ဝန်ဆောင်မှုများ စတင်အသုံးပြုရန် Login (သို့မဟုတ်) Register ပြုလုပ်ပါ</p>
-            </div>
-
-            <div class="auth-tabs">
-                <button class="auth-tab active" data-tab="login" onclick="showTab('login')">Login</button>
-                <button class="auth-tab" data-tab="register" onclick="showTab('register')">Register</button>
-            </div>
-
-            <div id="auth-error" class="response-message response-error" style="display:none;"></div>
-
-            <form class="auth-form" id="login-form" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label class="form-label" for="login-email"><i class="fas fa-envelope"></i> Email</label>
-                    <input type="email" id="login-email" class="form-input" placeholder="example@gmail.com" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="login-password"><i class="fas fa-lock"></i> Password</label>
-                    <div class="input-with-toggle">
-                        <input type="password" id="login-password" class="form-input" placeholder="Password" required>
-                    </div>
-                </div>
-                <button type="submit" class="auth-btn btn-primary"><i class="fas fa-sign-in-alt"></i> Login ဝင်မည်</button>
-                <div class="auth-footer" style="margin-top: 15px;">
-                    အကောင့်မရှိသေးဘူးလား? <span class="auth-link" style="color: var(--primary-light); cursor: pointer;" onclick="showTab('register')">Register လုပ်မည်</span>
-                </div>
-            </form>
-
-            <form class="auth-form hidden" id="register-form" onsubmit="handleRegister(event)">
-                 <div class="form-group">
-                    <label class="form-label" for="register-username"><i class="fas fa-user"></i> Username</label>
-                    <input type="text" id="register-username" class="form-input" placeholder="အမည်" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="register-email"><i class="fas fa-envelope"></i> Email</label>
-                    <input type="email" id="register-email" class="form-input" placeholder="example@gmail.com" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="register-password"><i class="fas fa-lock"></i> Password</label>
-                    <div class="input-with-toggle">
-                        <input type="password" id="register-password" class="form-input" placeholder="Password (အနည်းဆုံး ၆ လုံး)" required minlength="6">
-                    </div>
-                </div>
-                <button type="submit" class="auth-btn btn-primary"><i class="fas fa-user-plus"></i> အကောင့်အသစ်ဖန်တီးမည်</button>
-                <div class="auth-footer" style="margin-top: 15px;">
-                    အကောင့်ရှိပြီးသားလား? <span class="auth-link" style="color: var(--primary-light); cursor: pointer;" onclick="showTab('login')">Login ဝင်မည်</span>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <main class="main-app" id="main-app">
-        
-        <div class="order-form-container container-glass" id="order-view">
-            <h2 class="section-title"><i class="fas fa-edit"></i> ဝန်ဆောင်မှုမှာယူခြင်းပုံစံ</h2>
-            
-            <div class="step-indicator">
-                <span class="step-item active" id="step-1-indicator">၁။ ဝန်ဆောင်မှု ရွေးချယ်ပါ</span>
-                <span class="step-item" id="step-2-indicator">၂။ အချက်အလက် ထည့်သွင်းပါ</span>
-                <span class="step-item" id="step-3-indicator">၃။ အတည်ပြုရန်</span>
-            </div>
-
-            <form id="multi-step-order-form" onsubmit="event.preventDefault()">
-
-                <div class="step-content" id="step-1">
-                    <h3 class="section-title"><i class="fas fa-mouse-pointer"></i> Step 1: လိုအပ်သော ဝန်ဆောင်မှုကို ရွေးချယ်ပါ</h3>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="service-select"><i class="fas fa-hand-pointer"></i> ဝန်ဆောင်မှုအမျိုးအစား</label>
-                        
-                        <div class="custom-select-wrapper">
-                             <select id="service-select" class="form-select" onchange="selectService(this.value)" required>
-                                </select>
-                             <i class="fas fa-chevron-down custom-select-icon"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="step-actions">
-                        <div></div> 
-                        <button type="button" class="btn-primary" onclick="nextStep(1)">
-                            Next Step <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="step-content hidden" id="step-2">
-                    <h3 class="section-title"><i class="fas fa-info-circle"></i> Step 2: မှာယူရန် အချက်အလက်များဖြည့်ပါ</h3>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="link-input-step2"><i class="fas fa-link"></i> Link/ID (ပို့စ်/စာမျက်နှာ/ဗီဒီယို လင့်ခ်)</label>
-                        <input type="url" id="link-input-step2" class="form-input" placeholder="သင် Boost လိုသော Link (သို့) ID" required oninput="updateSummary()">
-                        <p style="font-size: 0.8em; color: var(--muted); margin-top: 5px;">* လင့်ခ်မှန်ကန်ကြောင်း သေချာစစ်ဆေးပေးပါ</p>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="qty-input-step2"><i class="fas fa-sort-numeric-up-alt"></i> အရေအတွက် (Qty)</label>
-                        <input type="number" id="qty-input-step2" class="form-input" placeholder="လိုချင်သော အရေအတွက် (ဥပမာ: 1000)" min="1" value="1" oninput="updateSummary()" required>
-                        <p style="font-size: 0.8em; color: var(--muted); margin-top: 5px;">* အနည်းဆုံး မှာယူမှုအရေအတွက်ရှိနိုင်ပါသည်</p>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="note-input-step2"><i class="fas fa-comment"></i> မှတ်ချက် (Admin တွေ့ရန်)</label>
-                        <textarea id="note-input-step2" class="form-input form-textarea" placeholder="အထူးလိုအပ်ချက်များရှိပါက ဖြည့်သွင်းနိုင်သည်" rows="3"></textarea>
-                    </div>
-
-                    <div class="step-actions">
-                        <button type="button" class="btn-secondary" onclick="prevStep(2)">
-                            <i class="fas fa-arrow-left"></i> နောက်သို့
-                        </button>
-                        <button type="button" class="btn-primary" onclick="nextStep(2)">
-                            Next Step <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="step-content hidden" id="step-3">
-                    <h3 class="section-title"><i class="fas fa-check-circle"></i> Step 3: Admin ပေးတဲ့ code နဲ့အတည်ပြု</h3>
-                    
-                    <div class="payment-info-step">
-                        <h4 style="color:var(--accent); margin-top:0;"><i class="fas fa-wallet"></i> အက်တာကိုငါပေးတဲ့ code ထည့်ပေးပါ</h4>
-                        
-                        <div class="qr-code-placeholder">
-                            <img src="your_kpay_qr_code_image.png" alt="KBZPay QR Code" id="kpay-qr-code" style="display: none;">
-                            <span id="qr-text"></span>
-                        </div>
-
-                        <div class="payment-item kpay">
-                            <i class="fas fa-mobile-alt fa-2x" style="color:var(--K-color);"></i>
-                            <div class="item-text">
-                                <strong>ထည့်ရမဲ့ နေရာက ငါစီမှာ လာတောင်းရမှာ</strong>
-                            </div>
-                            <i class="fas fa-copy" onclick="copyToClipboard('@kyawthihahtun12345')"></i>
-                        </div>
-                        <p style="font-size: 0.9em; color: var(--success);">* စုစုပေါင်းကျသင့်ငွေအတိုင်း တိကျစွာ လွှဲပြောင်းပေးပို့ပါရန်</p>
-                    </div>
-                    
-                    <div class="form-group" style="margin-top: 25px;">
-                        <label class="form-label" for="txn-id-input"><i class="fas fa-receipt"></i> adminစီမှာငွေလွှဲထားပြီးရင်ရတဲ့ကုတ်နံပါတ် (Admin ပေးတဲ့- 5 လုံး)</label>
-                        <input type="text" id="txn-id-input" class="form-input" placeholder="tg username @kboostmmစီမှာ‌ေတာင်းထားတဲ့ Code" required maxlength="5" pattern="\d{5}" oninput="updateSummary()">
-                        <p style="font-size: 0.8em; color: var(--danger); margin-top: 5px;">* Admin စီငွေလွှဲ ရရှိသော ကုတ်နံပါတ်ကိုသာ ဖြည့်သွင်းပါ</p>
-                    </div>
-
-                    <div id="order-response-message" class="response-message" style="display:none;"></div>
-
-                    <div class="step-actions">
-                        <button type="button" class="btn-secondary" onclick="prevStep(3)">
-                            <i class="fas fa-arrow-left"></i> နောက်သို့
-                        </button>
-                        <button type="submit" class="btn-primary" id="final-submit-btn" onclick="handleOrder(event)">
-                            <i class="fas fa-paper-plane"></i> Order ကို အတည်ပြုပေးပို့မည်
-                        </button>
-                    </div>
-                </div>
-            </form>
+    <div id="userSection" class="hidden">
+        <div class="wallet-box">
+            <small>My Balance</small><br>
+            <h2 style="margin:0;"><span id="userBalance">0</span> Ks</h2>
         </div>
 
-        <div class="summary-container container-glass">
-            <h3 class="section-title"><i class="fas fa-clipboard-list"></i> မှာယူမှု အကျဉ်းချုပ်</h3>
-            <div class="summary-details">
-                <div class="summary-item">
-                    <span class="summary-label">ဝန်ဆောင်မှု</span>
-                    <span class="summary-value" id="summary-service" style="color: var(--primary-light); font-weight: 600;">-- ဝန်ဆောင်မှု ရွေးပါ --</span>
-                </div>
-                <div class="summary-item">
-                    <span class="summary-label">Link/ID</span>
-                    <span class="summary-value" id="summary-link">N/A</span>
-                </div>
-                <div class="summary-item">
-                    <span class="summary-label">အရေအတွက်</span>
-                    <span class="summary-value" id="summary-qty">0</span>
-                </div>
-                <div class="summary-item">
-                    <span class="summary-label">နှုန်းထား (တစ်ယူနစ်)</span>
-                    <span class="summary-value" id="summary-unit-price">0 Ks</span>
-                </div>
-            </div>
-            <div class="summary-total">
-                <span>စုစုပေါင်း ကျသင့်ငွေ</span>
-                <span id="summary-total-price">0 Ks</span>
+        <div id="userPage">
+            <div class="card">
+                <h4 style="margin:0 0 10px; color:var(--primary);">🚀 Create Order</h4>
+                <select id="srvCat" onchange="loadSrvOptions()"></select>
+                <select id="srvList"></select>
+                <input type="url" id="targetLink" placeholder="Target Link (URL)">
+                <button class="btn btn-main" onclick="submitOrder()">ORDER (Wallet ဖြင့် နှုတ်မည်)</button>
             </div>
         </div>
-        
-        <div class="order-history-view container-glass hidden" id="orders-view" style="width: 100%;">
-            <h2 class="section-title"><i class="fas fa-history"></i> မှာယူမှု မှတ်တမ်း</h2>
-            <p style="color: var(--muted);">ဤနေရာတွင် သင်မှာယူခဲ့သော အော်ဒါမှတ်တမ်းများကို ဖော်ပြပါမည်။</p>
-            </div>
 
-         <div class="contact-view container-glass hidden" id="contact-view" style="width: 100%;">
-            <h2 class="section-title"><i class="fas fa-headset"></i> ဆက်သွယ်ရန်</h2>
-            <div class="contact-details">
-                <p><i class="fas fa-envelope" style="color: var(--primary-light);"></i> <strong>Email:</strong> chanyatewai2@gmail.com</p>
-                <p><i class="fas fa-phone-alt" style="color: var(--primary-light);"></i> <strong>ဖုန်းနံပါတ်:</strong> 09970573598</p>
-                <p><i class="fab tg-telegram-" style="color: var(--primary-light);"></i> <strong>telegram:</strong> <a href="#" style="color: var(--primary-light);">@KBoostMm</a></p>
-                <p style="margin-top: 20px;">အော်ဒါနှင့်ပတ်သက်သော အခက်အခဲများရှိပါက အထက်ပါလိပ်စာများသို့ ဆက်သွယ်မေးမြန်းနိုင်ပါသည်။</p>
+        <div id="topupPage" class="hidden">
+            <div class="card">
+                <h4>💰 Top Up Wallet</h4>
+                <p style="font-size:0.8rem; color:#aaa;">Kpay/Wave - 09xxxxxxxxx သို့ ငွေလွှဲပြီး ပြေစာတင်ပါ။</p>
+                <input type="number" id="topupAmount" placeholder="ဖြည့်မည့်ပမာဏ (Ks)">
+                <input type="text" id="topupBill" placeholder="ပြေစာ နောက်ဆုံး ၅ လုံး">
+                <input type="file" id="topupImg" accept="image/*">
+                <button class="btn btn-main" onclick="submitTopup()">SUBMIT TOPUP</button>
             </div>
         </div>
-        
-    </main>
-    
-    <div class="admin-panel container-glass hidden" id="admin-panel">
-        <div class="admin-controls">
-            <h2 class="section-title"><i class="fas fa-cogs"></i> Service Management (Admin)</h2>
-            <button class="btn-secondary" onclick="handleAdminBack()"><i class="fas fa-sign-out-alt"></i> Back to User View</button>
-        </div>
 
-        <h3 style="color: var(--primary-light); margin-bottom: 15px;">Existing Services</h3>
-        <table class="service-table">
-            <thead>
-                <tr>
-                    <th>Platform</th>
-                    <th>Name (ID)</th>
-                    <th>Category</th>
-                    <th>Price (Ks)</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="admin-service-list">
-                </tbody>
-        </table>
-
-        <div id="admin-response-message" class="response-message response-success" style="display:none; margin-top: 20px;"></div>
-
-        <div class="add-service-form">
-            <h3 style="color: var(--accent); margin-bottom: 20px;"><i class="fas fa-plus-circle"></i> Add New Service</h3>
-            <form id="add-service-form" onsubmit="handleAddService(event)">
-                <div class="form-group">
-                    <label class="form-label" for="add-id">Service ID (e.g., NEW_FB_LIKE)</label>
-                    <input type="text" id="add-id" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="add-platform">Platform (e.g., Facebook, TikTok)</label>
-                    <input type="text" id="add-platform" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="add-name">Service Name (e.g., Like 100)</label>
-                    <input type="text" id="add-name" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="add-price">Price (per unit - Ks)</label>
-                    <input type="number" id="add-price" class="form-input" min="1" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="add-category">Category (e.g., Facebook Services)</label>
-                    <input type="text" id="add-category" class="form-input" required>
-                </div>
-                <button type="submit" class="btn-primary admin-submit-btn"><i class="fas fa-save"></i> Save New Service</button>
-            </form>
+        <div id="historyPage" class="hidden">
+            <h3>Orders & Topups</h3>
+            <div id="userLogList"></div>
         </div>
     </div>
 
-    
-    <script>
+    <div id="adminPanel" class="hidden">
+        <div style="display:flex; gap:5px; margin-bottom:15px; overflow-x: auto;">
+            <button class="btn btn-main" style="padding:8px;" onclick="adminTab('orders')">Orders</button>
+            <button class="btn btn-main" style="padding:8px;" onclick="adminTab('topups')">Topups</button>
+            <button class="btn btn-main" style="padding:8px;" onclick="adminTab('users')">Users</button>
+            <button class="btn btn-main" style="padding:8px;" onclick="adminTab('services')">Services</button>
+        </div>
+        <div id="aContent"></div>
+    </div>
+</div>
+
+<nav id="botNav" class="bottom-nav hidden">
+    <div class="nav-link active" id="nHome" onclick="nav('userPage')"><i class="fas fa-shopping-cart"></i><br>Shop</div>
+    <div class="nav-link" id="nTopup" onclick="nav('topupPage')"><i class="fas fa-wallet"></i><br>Topup</div>
+    <div class="nav-link" id="nHistory" onclick="nav('historyPage')"><i class="fas fa-history"></i><br>History</div>
+</nav>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyB2wvjD9I_vCJDTpaNks8CCuTm4PDngajg",
+        authDomain: "kboostsmm.firebaseapp.com",
+        databaseURL: "https://kboostsmm-default-rtdb.firebaseio.com",
+        projectId: "kboostsmm",
+        storageBucket: "kboostsmm.firebasestorage.app",
+        messagingSenderId: "677087817569",
+        appId: "1:677087817569:web:6bdd6a9eb937907a889f20"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let currentUser = null;
+    let myBalance = 0;
+
+    function login() {
+        const u = document.getElementById('uIn').value.trim();
+        const p = document.getElementById('pIn').value.trim();
+        if(u === "KBOOSTMM" && p === "090635") {
+            currentUser = "Admin"; showAdmin();
+        } else {
+            db.ref('users/' + u).once('value', s => {
+                const d = s.val();
+                if(d) {
+                    if(d.isBanned) return alert("Banned!");
+                    if(d.password === p) { currentUser = u; showUser(); }
+                    else alert("Wrong Password");
+                } else {
+                    db.ref('users/' + u).set({ password: p, balance: 0, isBanned: false }).then(showUser);
+                    currentUser = u;
+                }
+            });
+        }
+    }
+
+    function showUser() {
+        document.getElementById('authPanel').classList.add('hidden');
+        document.getElementById('topNav').classList.remove('hidden');
+        document.getElementById('botNav').classList.remove('hidden');
+        document.getElementById('userSection').classList.remove('hidden');
+        document.getElementById('userDisplay').innerText = currentUser;
+        db.ref('users/' + currentUser + '/balance').on('value', s => {
+            myBalance = s.val() || 0;
+            document.getElementById('userBalance').innerText = myBalance;
+        });
+        loadSrvCategories();
+    }
+
+    function loadSrvCategories() {
+        db.ref('services').on('value', s => {
+            const catSelect = document.getElementById('srvCat');
+            catSelect.innerHTML = "";
+            for(let cat in s.val()) catSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
+            loadSrvOptions();
+        });
+    }
+
+    function loadSrvOptions() {
+        const cat = document.getElementById('srvCat').value;
+        db.ref('services/' + cat).once('value', s => {
+            const list = document.getElementById('srvList');
+            list.innerHTML = "";
+            s.forEach(c => {
+                const v = c.val();
+                list.innerHTML += `<option value="${v.price}">${v.name} - ${v.price} Ks</option>`;
+            });
+        });
+    }
+
+    function submitOrder() {
+        const srv = document.getElementById('srvList');
+        const price = parseInt(srv.value);
+        if(myBalance < price) return alert("လက်ကျန်ငွေ မလုံလောက်ပါ။ ငွေအရင်ဖြည့်ပါ။");
         
-        // **********************************************
-        // ⚡ BOT TOKEN & CHAT ID (Confirmed)
-        // **********************************************
-        const BOT_TOKEN = '8464074521:AAEvK2ESfG62KjAmHZGQUTTk41flpSS3hk0'; 
-        const CHAT_ID = '8401547964'; // Admin/Destination Chat ID             
-        const API_BASE_URL = `https://api.telegram.org/bot${BOT_TOKEN}`;
-        // **********************************************
-        const ADMIN_PASSWORD = 'Kyaw'; 
-        
-        // Data & State Management (Stored as a mutable array)
-        let services = [
-            { id: 'FB_LIKE_1K', platform: 'Facebook', name: 'Like 1,000', price: 2000, icon: 'fab fa-facebook-f facebook', category: 'Facebook Services' },
-            { id: 'FB_FOLLOW_1K', platform: 'Facebook', name: 'Follower 1,000', price: 3500, icon: 'fas fa-user-plus facebook', category: 'Facebook Services' },
-            { id: 'FB_SHARE_100', platform: 'Facebook', name: 'Share 100', price: 1500, icon: 'fas fa-share facebook', category: 'Facebook Services' },
-            { id: 'FB_VIEW_10K', platform: 'Facebook', name: 'Video View 10,000', price: 2500, icon: 'fas fa-eye facebook', category: 'Facebook Services' },
-            { id: 'TT_VIEW_10K', platform: 'TikTok', name: 'View 10,000', price: 1000, icon: 'fab fa-tiktok tiktok', category: 'TikTok Services' },
-            { id: 'TT_LIKE_1K', platform: 'TikTok', name: 'Like 1,000', price: 2500, icon: 'fas fa-heart tiktok', category: 'TikTok Services' },
-            { id: 'TT_FOLLOW_100', platform: 'TikTok', name: 'Follower 100', price: 1800, icon: 'fas fa-user-friends tiktok', category: 'TikTok Services' },
-            { id: 'YT_SUB_100', platform: 'Youtube', name: 'Subscriber 100', price: 5000, icon: 'fab fa-youtube youtube', category: 'Youtube Services' },
-            { id: 'YT_LIKE_100', platform: 'Youtube', name: 'Like 100', price: 1200, icon: 'far fa-thumbs-up youtube', category: 'Youtube Services' },
-            { id: 'TELE_MEM_100', platform: 'Telegram', name: 'Member 100', price: 1500, icon: 'fab fa-telegram-plane telegram', category: 'Telegram Services' },
-            { id: 'TELE_VIEW_1K', platform: 'Telegram', name: 'Post View 1,000', price: 800, icon: 'fas fa-chart-line telegram', category: 'Telegram Services' }
-        ];
+        const link = document.getElementById('targetLink').value;
+        if(!link) return alert("Link ထည့်ပါ");
 
-        let currentUser = null; 
-        let currentStep = 1;
-        let selectedService = null; 
-        let currentView = 'order'; // Added state for navigation
+        if(confirm(price + " Ks နှုတ်ယူမည်ကို သဘောတူပါသလား?")) {
+            db.ref('users/' + currentUser).update({ balance: myBalance - price });
+            db.ref('orders').push({
+                user: currentUser, service: srv.options[srv.selectedIndex].text,
+                link: link, status: 'Pending', time: new Date().toLocaleString()
+            });
+            alert("Order တင်ပြီးပါပြီ!");
+        }
+    }
 
-        // --- TELEGRAM API FUNCTION (Retained) ---
-        async function sendToTelegram(message) {
-            const payload = {
-                chat_id: CHAT_ID,
-                text: message, 
-                parse_mode: 'MarkdownV2'
-            };
+    function submitTopup() {
+        const amt = document.getElementById('topupAmount').value;
+        const bill = document.getElementById('topupBill').value;
+        const file = document.getElementById('topupImg').files[0];
+        if(!amt || !file) return alert("အချက်အလက်ပြည့်စုံစွာဖြည့်ပါ");
 
-            try {
-                const response = await fetch(`${API_BASE_URL}/sendMessage`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            db.ref('topups').push({
+                user: currentUser, amount: parseInt(amt), bill: bill,
+                img: reader.result, status: 'Pending', time: new Date().toLocaleString()
+            });
+            alert("ငွေဖြည့်လွှာ တင်ပြီးပါပြီ။ ခဏစောင့်ပေးပါ။");
+            nav('historyPage');
+        };
+    }
+
+    // ADMIN FUNCTIONS
+    function showAdmin() {
+        document.getElementById('authPanel').classList.add('hidden');
+        document.getElementById('topNav').classList.remove('hidden');
+        document.getElementById('adminPanel').classList.remove('hidden');
+        adminTab('orders');
+    }
+
+    function adminTab(t) {
+        const area = document.getElementById('aContent');
+        area.innerHTML = "Loading...";
+        if(t === 'topups') {
+            db.ref('topups').on('value', s => {
+                area.innerHTML = "<h4>Pending Topups</h4>";
+                s.forEach(c => {
+                    const top = c.val();
+                    if(top.status === 'Pending') {
+                        area.innerHTML += `<div class="card">
+                            <b>User: ${top.user} (${top.amount} Ks)</b><br>
+                            <img src="${top.img}" style="width:100px;"><br>
+                            <button class="btn btn-main" onclick="approveTopup('${c.key}', '${top.user}', ${top.amount})">Approve</button>
+                        </div>`;
+                    }
                 });
-                
-                const data = await response.json();
-                
-                if (!data.ok) {
-                    console.error("Telegram API Error:", data.description);
-                    return { ok: false, error: data.description };
-                }
-                
-                return { ok: true };
-                
-            } catch (error) {
-                console.error("Network or Fetch Error sending to Telegram:", error);
-                return { ok: false, error: "Network Error or invalid API configuration." };
-            }
-        }
-
-        // --- AUTH/UI FUNCTIONS (UPDATED: Added Admin Button Visibility & Navigation) ---
-        function showMessage(elementId, message, isSuccess) {
-            const element = document.getElementById(elementId);
-            element.textContent = message;
-            element.className = 'response-message ' + (isSuccess ? 'response-success' : 'response-error');
-            element.style.display = 'block';
-            setTimeout(() => { element.style.display = 'none'; }, 6000);
-        }
-        
-        function showTab(tabName) {
-            const loginForm = document.getElementById('login-form');
-            const registerForm = document.getElementById('register-form');
-            const authError = document.getElementById('auth-error');
-            
-            if (loginForm) loginForm.classList.add('hidden');
-            if (registerForm) registerForm.classList.add('hidden');
-            
-            if (tabName === 'login' && loginForm) loginForm.classList.remove('hidden');
-            if (tabName === 'register' && registerForm) registerForm.classList.remove('hidden');
-            
-            document.querySelectorAll('.auth-tab').forEach(tab => {
-                tab.classList.remove('active');
-                if (tab.getAttribute('data-tab') === tabName) {
-                    tab.classList.add('active');
-                }
-            });
-
-            if (authError) authError.style.display = 'none';
-        }
-
-        // Function to control main application views (Order, History, Contact)
-        function showView(viewName, event) {
-             if (event) event.preventDefault();
-            
-            const mainApp = document.getElementById('main-app');
-            const orderView = document.getElementById('order-view');
-            const ordersView = document.getElementById('orders-view');
-            const contactView = document.getElementById('contact-view');
-            const adminPanel = document.getElementById('admin-panel');
-            
-            if (!currentUser) {
-                 // Force login if not authenticated
-                 updateUI(null);
-                 return;
-            }
-
-            // Hide all main views and Admin Panel
-            if (orderView) orderView.classList.add('hidden');
-            if (ordersView) ordersView.classList.add('hidden');
-            if (contactView) contactView.classList.add('hidden');
-            if (adminPanel) adminPanel.classList.add('hidden');
-            
-            // Show the selected view or Order Form by default
-            if (viewName === 'order' && orderView) {
-                orderView.classList.remove('hidden');
-            } else if (viewName === 'orders' && ordersView) {
-                 ordersView.classList.remove('hidden');
-            } else if (viewName === 'contact' && contactView) {
-                 contactView.classList.remove('hidden');
-            }
-            
-            // Show main app container if not in Admin view
-            if (mainApp) mainApp.style.display = 'flex';
-            
-            currentView = viewName;
-            
-            // Update Navigation active state
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('data-view') === viewName) {
-                    link.classList.add('active');
-                }
-            });
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-
-        function updateUI(user) {
-            const isLogged = user !== null;
-            
-            const authModal = document.getElementById('auth-modal');
-            if(authModal) authModal.style.display = isLogged ? 'none' : 'flex';
-            
-            const mainApp = document.getElementById('main-app');
-            const isAdminPanelOpen = !document.getElementById('admin-panel').classList.contains('hidden');
-            
-            // Control Main App visibility
-            if(mainApp) mainApp.style.display = isLogged && !isAdminPanelOpen ? 'flex' : 'none'; 
-            
-            const headerUserInfo = document.getElementById('header-user-info');
-            const logoutButton = document.getElementById('logout-button');
-            const adminAccessButton = document.getElementById('admin-access-button'); 
-            const mainNavigation = document.getElementById('main-navigation');
-
-            // Control Visibility
-            if (mainNavigation) mainNavigation.style.display = isLogged ? 'flex' : 'none';
-            if (headerUserInfo) headerUserInfo.style.display = isLogged ? 'flex' : 'none';
-            if (logoutButton) logoutButton.style.display = isLogged ? 'flex' : 'none';
-            if (adminAccessButton) adminAccessButton.style.display = isLogged ? 'flex' : 'none'; 
-            
-            if (isLogged) {
-                const usernameDisplay = document.getElementById('display-username');
-                const emailDisplay = document.getElementById('display-email');
-                const avatarInitial = document.getElementById('user-avatar-initial');
-                
-                if (usernameDisplay) usernameDisplay.textContent = user.username;
-                if (emailDisplay) emailDisplay.textContent = user.email;
-                if (avatarInitial) avatarInitial.textContent = user.username.charAt(0).toUpperCase();
-                
-                // If logging in, ensure we are on the 'order' view (default)
-                if (!isAdminPanelOpen) showView('order');
-            } else {
-                 // If logging out, ensure main views are hidden
-                 if(mainApp) mainApp.style.display = 'none';
-                 if (document.getElementById('admin-panel')) document.getElementById('admin-panel').classList.add('hidden');
-            }
-        }
-        
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert(`"${text}" ကို ကူးယူပြီးပါပြီ`);
-            }, (err) => {
-                console.error('Could not copy text: ', err);
             });
         }
-        
-        // --- AUTHENTICATION HANDLERS (Retained Logic) ---
-        async function handleRegister(event) {
-             event.preventDefault();
-            const username = document.getElementById('register-username').value.trim();
-            const email = document.getElementById('register-email').value.trim();
-            const password = document.getElementById('register-password').value.trim();
-            
-            if (!username || !email || password.length < 6) {
-                showMessage('auth-error', 'Username, Email နှင့် Password (အနည်းဆုံး ၆ လုံး) ကို ပြည့်စုံစွာ ထည့်သွင်းပါ', false);
-                return;
-            }
-            
-            const escapeMarkdownV2 = (text) => text.replace(/([_\*[\]()~`>#+\-=|{}.!])/g, '\\$1');
-
-            const message = 
-`✅ *New User Registration* ✅
-
-*Username:* ${escapeMarkdownV2(username)}
-*Email:* ${escapeMarkdownV2(email)}
-*Telegram ID:* ${escapeMarkdownV2(CHAT_ID)}
-*Password \\(Demo\\):* ${escapeMarkdownV2(password)}
-*Time:* ${escapeMarkdownV2(new Date().toLocaleString('en-US', { hour12: true, timeZoneName: 'short' }))}`;
-
-            const result = await sendToTelegram(message);
-
-            if (result.ok) {
-                currentUser = { username, email, password, id: CHAT_ID }; 
-                updateUI(currentUser);
-                showMessage('auth-error', '✅ Register အောင်မြင်ပါပြီ။ Admin Bot သို့ Message ပို့ထားပါသည်', true);
-            } else {
-                showMessage('auth-error', `Register မအောင်မြင်ပါ: ${result.error}`, false);
-            }
-        }
-
-        async function handleLogin(event) {
-            event.preventDefault();
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value.trim();
-            
-            if (!email || !password) {
-                 showMessage('auth-error', 'Email နှင့် Password တို့ကို ဖြည့်သွင်းပါ', false);
-                 return;
-            }
-            
-            // Simulating user data based on email for UI display
-            const simulatedUser = { 
-                username: email.split('@')[0] || "User", 
-                email: email, 
-                password: password, 
-                id: CHAT_ID
-            };
-            
-            const escapeMarkdownV2 = (text) => text.replace(/([_\*[\]()~`>#+\-=|{}.!])/g, '\\$1');
-
-            const message = 
-`🔑 *User Login* 🔑
-
-*Email:* ${escapeMarkdownV2(email)}
-*Telegram ID:* ${escapeMarkdownV2(CHAT_ID)}
-*Time:* ${escapeMarkdownV2(new Date().toLocaleString('en-US', { hour12: true, timeZoneName: 'short' }))}`;
-
-            const result = await sendToTelegram(message);
-
-            if (result.ok) {
-                currentUser = simulatedUser;
-                updateUI(currentUser);
-                showMessage('auth-error', '✅ Login အောင်မြင်ပါပြီ။ Admin Bot သို့ Message ပို့ထားပါသည်', true);
-                
-                // Reset form state after successful login
-                selectedService = null;
-                currentStep = 1;
-                renderServiceSelect(); 
-                updateSummary();
-                updateStepUI();
-                const form = document.getElementById('multi-step-order-form');
-                if (form) form.reset();
-            } else {
-                showMessage('auth-error', `Login မအောင်မြင်ပါ: ${result.error}`, false);
-            }
-        }
-        
-        document.getElementById('logout-button').addEventListener('click', () => {
-            currentUser = null;
-            updateUI(null);
-            showTab('login');
-        });
-        
-        // --- WIZARD ORDER LOGIC (Retained Logic) ---
-
-        function renderServiceSelect() {
-            const selectElement = document.getElementById('service-select');
-            if (!selectElement) return;
-
-            selectElement.innerHTML = '<option value="" disabled selected>-- ဝန်ဆောင်မှုအမျိုးအစား ရွေးချယ်ပါ --</option>'; 
-
-            const groupedServices = services.reduce((acc, service) => {
-                acc[service.category] = acc[service.category] || [];
-                acc[service.category].push(service);
-                return acc;
-            }, {});
-
-            for (const category in groupedServices) {
-                const optgroup = document.createElement('optgroup');
-                optgroup.label = category; 
-                
-                groupedServices[category].forEach(service => {
-                    const option = document.createElement('option');
-                    option.value = service.id;
-                    option.textContent = `${service.platform} ${service.name} - ${service.price.toLocaleString()} Ks (တစ်ယူနစ်)`;
-                    optgroup.appendChild(option);
+        if(t === 'orders') {
+            db.ref('orders').on('value', s => {
+                area.innerHTML = "<h4>Orders</h4>";
+                s.forEach(c => {
+                    const o = c.val();
+                    area.innerHTML += `<div class="card">
+                        <b>${o.user}</b> - ${o.service}<br>
+                        <small>${o.link}</small><br>
+                        Status: ${o.status}
+                        <button class="btn btn-main" onclick="db.ref('orders/${c.key}').update({status:'Done'})">Mark Done</button>
+                    </div>`;
                 });
-                selectElement.appendChild(optgroup);
-            }
-        }
-        
-        function selectService(serviceId) {
-            selectedService = services.find(s => s.id === serviceId) || null;
-            updateSummary();
-        }
-
-        function updateSummary() {
-            const qtyInput = document.getElementById('qty-input-step2');
-            const linkInput = document.getElementById('link-input-step2');
-            const txnIdInput = document.getElementById('txn-id-input');
-            
-            const qty = parseFloat(qtyInput?.value) || 0;
-            const link = linkInput?.value || 'N/A';
-            const unitPrice = selectedService ? selectedService.price : 0;
-            
-            const totalPrice = unitPrice * qty;
-
-            document.getElementById('summary-service').textContent = selectedService ? `${selectedService.platform} ${selectedService.name}` : '-- ဝန်ဆောင်မှု ရွေးချယ်ပါ --';
-            document.getElementById('summary-link').textContent = link.length > 25 ? link.substring(0, 22) + '...' : link;
-            document.getElementById('summary-qty').textContent = qty.toLocaleString();
-            document.getElementById('summary-unit-price').textContent = `${unitPrice.toLocaleString()} Ks`;
-            document.getElementById('summary-total-price').textContent = `${totalPrice.toLocaleString()} Ks`;
-            
-            const isReady = selectedService && qty > 0 && link && totalPrice > 0 && (currentStep < 3 || (txnIdInput && txnIdInput.value.trim().length === 5));
-
-            const finalSubmitBtn = document.getElementById('final-submit-btn');
-            if (finalSubmitBtn) {
-                 finalSubmitBtn.disabled = !isReady;
-            }
-        }
-
-        function nextStep(step) {
-            if (step === 1) {
-                if (!selectedService) {
-                    alert('ဝန်ဆောင်မှုအမျိုးအစားကို ရွေးချယ်ပေးပါ');
-                    return;
-                }
-            } else if (step === 2) {
-                const linkInput = document.getElementById('link-input-step2');
-                const qtyInput = document.getElementById('qty-input-step2');
-                const link = linkInput?.value.trim();
-                const qty = parseFloat(qtyInput?.value);
-                
-                if (!link || qty <= 0 || isNaN(qty)) {
-                    alert('Link/ID နှင့် အရေအတွက်ကို မှန်ကန်စွာ ဖြည့်သွင်းပါ');
-                    return;
-                }
-            }
-            
-            if (step < 3) {
-                 currentStep = step + 1;
-                 updateStepUI();
-                 if (currentStep === 3) updateSummary(); 
-            }
-        }
-
-        function prevStep(step) {
-            if (step > 1) {
-                currentStep = step - 1;
-                updateStepUI();
-            }
-        }
-
-        function updateStepUI() {
-            const steps = [1, 2, 3];
-            steps.forEach(step => {
-                const content = document.getElementById(`step-${step}`);
-                const indicator = document.getElementById(`step-${step}-indicator`);
-                
-                if (content) content.classList.add('hidden');
-                if (indicator) {
-                    indicator.classList.remove('active');
-                    indicator.classList.remove('completed');
-                }
-                
-                if (step === currentStep) {
-                    if (content) content.classList.remove('hidden');
-                    if (indicator) indicator.classList.add('active');
-                } else if (step < currentStep) {
-                    if (indicator) indicator.classList.add('completed');
-                }
-            });
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        
-        async function handleOrder(event) {
-            event.preventDefault();
-            
-            if (!currentUser || !selectedService) {
-                showMessage('order-response-message', 'Order မတင်နိုင်ပါ၊ Login ဝင်ထားကြောင်း သေချာပါစေ', false);
-                return;
-            }
-
-            const link = document.getElementById('link-input-step2').value.trim();
-            const quantity = document.getElementById('qty-input-step2').value.trim();
-            const note = document.getElementById('note-input-step2').value.trim();
-            const totalPrice = document.getElementById('summary-total-price').textContent;
-            const txnId = document.getElementById('txn-id-input').value.trim(); 
-            
-            if (!link || parseFloat(quantity) <= 0 || txnId.length !== 5) {
-                 showMessage('order-response-message', 'Link/ID၊ အရေအတွက်နှင့် ငွေလွှဲကုတ်နံပါတ် ၅ လုံးကို ပြည့်စုံစွာ ဖြည့်သွင်းပါ', false);
-                 return;
-            }
-            
-            const escapeMarkdownV2 = (text) => {
-                if (!text) return '';
-                // Note: The total price string already contains Ks, so we need to escape all special chars in it.
-                return text.replace(/([_\*[\]()~`>#+\-=|{}.!])/g, '\\$1');
-            };
-
-            const escapedLink = escapeMarkdownV2(link);
-            const escapedNote = escapeMarkdownV2(note || '_None_');
-            const escapedUsername = escapeMarkdownV2(currentUser.username);
-            const escapedEmail = escapeMarkdownV2(currentUser.email);
-            const escapedUserID = escapeMarkdownV2(currentUser.id); 
-            const escapedTxnId = escapeMarkdownV2(txnId); 
-            const escapedTime = escapeMarkdownV2(new Date().toLocaleString('en-US', { hour12: true, timeZoneName: 'short' }));
-            
-            const message = 
-`🚀 *NEW USER ORDER \\(Wizard Form\\)* 🚀
-
-*User:* ${escapedUsername}
-*Email:* ${escapedEmail}
-*Telegram ID \\(User\\):* ${escapedUserID}
-*Service:* ${escapeMarkdownV2(selectedService.platform)} ${escapeMarkdownV2(selectedService.name)} \\(${escapeMarkdownV2(selectedService.id)}\\)
-*Quantity:* ${escapeMarkdownV2(quantity)}
-*Link/ID:* ${escapedLink}
-*Total Price:* ${escapeMarkdownV2(totalPrice)}
-*Payment Method:* KBZPay
-*Txn ID \\(ငွေလွှဲကုတ်\\):* ${escapedTxnId}
-*Note:* ${escapedNote}
-*Time:* ${escapedTime}`;
-
-            const submitBtn = document.getElementById('final-submit-btn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ပေးပို့နေပါသည်...';
-
-            const result = await sendToTelegram(message);
-            
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Order ကို အတည်ပြုပေးပို့မည်';
-
-            if (result.ok) {
-                showMessage('order-response-message', '✅ Order အောင်မြင်စွာ ပေးပို့ပြီးပါပြီ။ Admin Bot သို့ Message ပို့ထားပါသည်', true);
-                
-                // Reset form state after successful order submission
-                const form = document.getElementById('multi-step-order-form');
-                if (form) form.reset();
-                selectedService = null;
-                currentStep = 1;
-                renderServiceSelect(); 
-                updateSummary();
-                updateStepUI(); 
-            } else {
-                showMessage('order-response-message', `❌ Order ပေးပို့ခြင်း မအောင်မြင်ပါ- ${result.error || 'Unknown Error'}`, false);
-            }
-        }
-
-        // --- ADMIN ACCESS LOGIC (Retained Logic & Updated UI) ---
-        
-        function showAdminModal() {
-            document.getElementById('admin-password-modal').classList.remove('hidden');
-            document.getElementById('admin-password-input').value = '';
-            document.getElementById('admin-password-error').style.display = 'none';
-        }
-
-        document.getElementById('admin-close-modal').addEventListener('click', () => {
-            document.getElementById('admin-password-modal').classList.add('hidden');
-        });
-
-        function handleAdminLogin(event) {
-            event.preventDefault();
-            const input = document.getElementById('admin-password-input').value;
-            const errorMsg = document.getElementById('admin-password-error');
-            
-            if (input === ADMIN_PASSWORD) {
-                document.getElementById('admin-password-modal').classList.add('hidden');
-                document.getElementById('main-app').style.display = 'none'; // Hide user views
-                document.getElementById('admin-panel').classList.remove('hidden'); // Show admin panel
-                renderAdminServiceList();
-                errorMsg.style.display = 'none';
-                
-            } else {
-                errorMsg.textContent = 'Password မမှန်ကန်ပါ';
-                errorMsg.style.display = 'block';
-            }
-        }
-
-        function handleAdminBack() {
-            document.getElementById('admin-panel').classList.add('hidden'); // Hide admin panel
-            // Re-check if user is logged in before showing main app (back to last view, usually 'order')
-            if (currentUser) {
-                updateUI(currentUser); 
-                showView(currentView);
-            } else {
-                updateUI(null);
-            }
-            renderServiceSelect(); // Re-render user service list
-            updateSummary();
-        }
-
-        function renderAdminServiceList() {
-            const listBody = document.getElementById('admin-service-list');
-            listBody.innerHTML = '';
-
-            services.forEach((service, index) => {
-                const row = listBody.insertRow();
-                row.innerHTML = `
-                    <td>${service.platform}</td>
-                    <td>${service.name} (${service.id})</td>
-                    <td>${service.category}</td>
-                    <td>${service.price.toLocaleString()} Ks</td>
-                    <td><button class="admin-action-btn" onclick="deleteService(${index})"><i class="fas fa-trash-alt"></i> Delete</button></td>
-                `;
             });
         }
-        
-        function deleteService(index) {
-            if (confirm(`ဝန်ဆောင်မှု: ${services[index].name} ကို ဖျက်ရန် သေချာပါသလား။`)) {
-                services.splice(index, 1);
-                renderAdminServiceList();
-                showMessage('admin-response-message', '✅ Service ကို အောင်မြင်စွာ ဖျက်လိုက်ပါပြီ', true);
-            }
-        }
+    }
 
-        function handleAddService(event) {
-            event.preventDefault();
-            const form = event.target;
-            
-            const newService = {
-                id: form.elements['add-id'].value.trim(),
-                platform: form.elements['add-platform'].value.trim(),
-                name: form.elements['add-name'].value.trim(),
-                price: parseInt(form.elements['add-price'].value),
-                icon: 'fas fa-star', // Default icon
-                category: form.elements['add-category'].value.trim() || `${form.elements['add-platform'].value.trim()} Services`
-            };
-            
-            if (services.some(s => s.id === newService.id)) {
-                showMessage('admin-response-message', '❌ Service ID သည် ရှိပြီးသားဖြစ်နေသည်', false);
-                return;
-            }
-
-            if (isNaN(newService.price) || newService.price <= 0) {
-                 showMessage('admin-response-message', '❌ Price ကို မှန်ကန်စွာ ထည့်သွင်းပေးပါ', false);
-                 return;
-            }
-
-            services.push(newService);
-            form.reset();
-            renderAdminServiceList();
-            showMessage('admin-response-message', '✅ New Service အသစ် ထည့်သွင်းပြီးပါပြီ', true);
-        }
-
-
-        // --- INITIALIZATION ---
-        document.addEventListener('DOMContentLoaded', () => {
-             // Attach event listeners for dynamic updates
-             const txnIdInput = document.getElementById('txn-id-input');
-             if (txnIdInput) {
-                 txnIdInput.addEventListener('input', updateSummary);
-             }
-             const qtyInput = document.getElementById('qty-input-step2');
-             if (qtyInput) {
-                 qtyInput.addEventListener('input', updateSummary);
-             }
-             
-             // Check if KPay QR Code image is actually present
-             const kpayQr = document.getElementById('kpay-qr-code');
-             const qrText = document.getElementById('qr-text');
-             if (kpayQr && qrText) {
-                 if (kpayQr.src !== 'your_kpay_qr_code_image.png' && kpayQr.src.includes('your_kpay_qr_code_image.png') === false) {
-                    kpayQr.style.display = 'block';
-                    qrText.style.display = 'none';
-                 }
-             }
-
-            updateUI(currentUser);
-            renderServiceSelect(); 
-            updateSummary();
-            updateStepUI();
-            showTab('login');
+    function approveTopup(key, user, amt) {
+        db.ref('users/' + user + '/balance').once('value', s => {
+            const current = s.val() || 0;
+            db.ref('users/' + user).update({ balance: current + amt });
+            db.ref('topups/' + key).update({ status: 'Approved' });
+            alert("Approved!");
         });
-        
-    </script>
+    }
+
+    function nav(p) {
+        ['userPage', 'topupPage', 'historyPage'].forEach(id => document.getElementById(id).classList.add('hidden'));
+        document.getElementById(p).classList.remove('hidden');
+        if(p === 'historyPage') renderLogs();
+    }
+
+    function renderLogs() {
+        db.ref('orders').orderByChild('user').equalTo(currentUser).once('value', s => {
+            let h = "<h4>Orders</h4>";
+            s.forEach(c => { h += `<div class='card'>${c.val().service} - ${c.val().status}</div>`; });
+            document.getElementById('userLogList').innerHTML = h;
+        });
+    }
+
+    function logout() { location.reload(); }
+</script>
 </body>
 </html>
-
