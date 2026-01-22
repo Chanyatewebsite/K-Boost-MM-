@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K-BOOST MM</title>
+    <title>K-BOOST MM </title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -15,29 +15,27 @@
         .hidden { display: none !important; }
         .card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px; }
         input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; background: #0b0f1a; color: white; border: 1px solid var(--border); box-sizing: border-box; outline: none; font-family: 'Padauk'; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-family: 'Padauk'; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-family: 'Padauk'; transition: 0.3s; }
         .btn-main { background: var(--primary); color: #000; }
         .btn-red { background: var(--secondary); color: white; }
         .btn-sm { padding: 6px 10px; font-size: 11px; border-radius: 5px; cursor: pointer; border: none; margin: 2px; font-weight: bold; }
         
-        .auth-container { width: 100%; max-width: 400px; margin: 50px auto; position: relative; overflow: hidden; border-radius: 20px; background: var(--card); border: 1px solid var(--border); }
+        /* Sliding Auth */
+        .auth-container { width: 100%; max-width: 400px; margin: 50px auto; overflow: hidden; border-radius: 20px; background: var(--card); border: 1px solid var(--border); }
         .auth-tabs { display: flex; justify-content: space-around; padding: 20px 0; position: relative; }
-        .auth-tabs span { cursor: pointer; font-weight: bold; z-index: 2; transition: 0.3s; color: #666; }
+        .auth-tabs span { cursor: pointer; font-weight: bold; z-index: 2; color: #666; }
         .auth-tabs span.active { color: var(--primary); }
-        .tab-indicator { position: absolute; bottom: 15px; height: 3px; width: 40px; background: var(--primary); transition: 0.3s; border-radius: 5px; }
         .form-slider { display: flex; width: 200%; transition: 0.5s ease-in-out; }
         .auth-form { width: 50%; padding: 0 25px 30px 25px; box-sizing: border-box; }
 
         .top-bar { background: rgba(11, 15, 26, 0.95); padding: 15px; display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border); }
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; justify-content: space-around; padding: 10px; border-top: 1px solid #333; }
-        .nav-link { color: #666; font-size: 11px; text-align: center; cursor: pointer; text-decoration: none; }
+        .nav-link { color: #666; font-size: 11px; text-align: center; cursor: pointer; }
         .nav-link.active { color: var(--primary); }
         .wallet-box { background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); padding: 20px; border-radius: 15px; text-align: center; color: #000; margin-bottom: 15px; }
         
-        .badge { padding: 4px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; }
-        .st-Pending { background: #f59e0b; color: white; }
-        .st-Completed { background: #10b981; color: white; }
-        .st-Canceled { background: #ef4444; color: white; }
+        .badge { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+        .st-Pending { background: #f59e0b; } .st-Completed { background: #10b981; } .st-Canceled { background: #ef4444; }
     </style>
 </head>
 <body>
@@ -51,9 +49,8 @@
     <div id="authPanel">
         <div class="auth-container">
             <div class="auth-tabs">
-                <span id="tabLogin" class="active" onclick="toggleAuth('login')">အကောင့်ဝင်ရန်</span>
-                <span id="tabSignup" onclick="toggleAuth('signup')">အကောင့်သစ်ဖွင့်ရန်</span>
-                <div id="indicator" class="tab-indicator" style="left: 19%;"></div>
+                <span id="tLog" class="active" onclick="toggleAuth('login')">အကောင့်ဝင်ရန်</span>
+                <span id="tSig" onclick="toggleAuth('signup')">အကောင့်သစ်ဖွင့်ရန်</span>
             </div>
             <div class="form-slider" id="formSlider">
                 <div class="auth-form">
@@ -79,11 +76,11 @@
 
         <div id="userPage">
             <div class="card">
-                <h4><i class="fas fa-shopping-cart"></i> ဝန်ဆောင်မှုမှာယူရန်</h4>
+                <h4><i class="fas fa-cart-arrow-down"></i> မှာယူရန်</h4>
                 <select id="srvCat" onchange="loadSrvOptions()"></select>
                 <select id="srvList" onchange="calcQty()"></select>
-                <input type="url" id="targetLink" placeholder="Link ထည့်ပါ (ဥပမာ- Post Link)">
-                <input type="number" id="buyAmount" placeholder="ဝယ်ယူမည့်ငွေပမာဏ (Ks)" oninput="calcQty()">
+                <input type="url" id="targetLink" placeholder="Link ထည့်ပါ">
+                <input type="number" id="buyAmount" placeholder="ဝယ်ယူမည့်ငွေ (Ks)" oninput="calcQty()">
                 <div style="background:#000; padding:15px; border-radius:10px; text-align:center; border:1px dashed var(--border);">
                     ရရှိမည့်အရေအတွက်: <b id="resultQty" style="color:var(--primary); font-size:22px;">0</b>
                 </div>
@@ -108,12 +105,12 @@
 
     <div id="adminPanel" class="hidden">
         <div class="card" style="border: 2px solid gold;">
-            <h4 style="color:gold;"><i class="fas fa-user-shield"></i> Admin Master Control</h4>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:10px;">
-                <button class="btn-main btn-sm" onclick="adminTab('deposits')">ငွေဖြည့်လွှာများ</button>
+            <h4 style="color:gold;"><i class="fas fa-user-shield"></i> Admin Control</h4>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
                 <button class="btn-main btn-sm" onclick="adminTab('users')">အသုံးပြုသူများ</button>
+                <button class="btn-main btn-sm" onclick="adminTab('services')">ဝန်ဆောင်မှုများ</button>
+                <button class="btn-main btn-sm" onclick="adminTab('deposits')">ငွေဖြည့်လွှာများ</button>
                 <button class="btn-main btn-sm" onclick="adminTab('orders')">အော်ဒါအားလုံး</button>
-                <button class="btn-main btn-sm" onclick="adminTab('services')">ဝန်ဆောင်မှုပြင်ရန်</button>
             </div>
         </div>
         <div id="aContent"></div>
@@ -127,7 +124,7 @@
 </nav>
 
 <script>
-    // --- FIREBASE SETUP ---
+    // --- FIREBASE CONFIG ---
     const firebaseConfig = {
         apiKey: "AIzaSyB2wvjD9I_vCJDTpaNks8CCuTm4PDngajg",
         databaseURL: "https://kboostsmm-default-rtdb.firebaseio.com",
@@ -139,25 +136,24 @@
     // --- AUTH LOGIC ---
     function toggleAuth(type) {
         const slider = document.getElementById('formSlider');
-        const indicator = document.getElementById('indicator');
         if(type === 'login') {
             slider.style.transform = 'translateX(0%)';
-            indicator.style.left = '19%';
+            document.getElementById('tLog').classList.add('active');
+            document.getElementById('tSig').classList.remove('active');
         } else {
             slider.style.transform = 'translateX(-50%)';
-            indicator.style.left = '69%';
+            document.getElementById('tSig').classList.add('active');
+            document.getElementById('tLog').classList.remove('active');
         }
     }
 
     function signup() {
         const u = document.getElementById('uUp').value.trim(), p = document.getElementById('pUp').value.trim();
-        if(!u || !p) return alert("အချက်အလက်ဖြည့်ပါ");
-        db.ref('users/'+u).once('value', s => {
-            if(s.exists()) return alert("အမည်ရှိပြီးသားဖြစ်သည်");
+        if(u && p) {
             db.ref('users/'+u).set({password:p, balance:0, isBanned:false}).then(() => {
-                alert("အကောင့်ဖွင့်ခြင်းအောင်မြင်ပါသည်!"); toggleAuth('login');
+                alert("အကောင့်ဖွင့်ပြီးပါပြီ!"); toggleAuth('login');
             });
-        });
+        }
     }
 
     function login() {
@@ -167,21 +163,14 @@
             db.ref('users/'+u).once('value', s => {
                 const d = s.val();
                 if(d && d.password === p) {
-                    if(d.isBanned) return alert("သင့်အကောင့် ပိတ်ခံထားရပါသည်!");
+                    if(d.isBanned) return alert("Account Banned!");
                     currentUser = u; showUser();
-                } else alert("အမည် သို့မဟုတ် လျှို့ဝှက်နံပါတ် မှားနေပါသည်!");
+                } else alert("အမည်/လျှို့ဝှက်နံပါတ် မှားယွင်းနေပါသည်။");
             });
         }
     }
 
-    // --- NAVIGATION ---
-    function nav(p) {
-        ['userPage', 'historyPage', 'fundPage'].forEach(id => document.getElementById(id).classList.add('hidden'));
-        document.getElementById(p).classList.remove('hidden');
-        if(p === 'historyPage') loadOrderHistory();
-    }
-
-    // --- USER FUNCTIONS ---
+    // --- USER LOGIC ---
     function showUser() {
         document.getElementById('authPanel').classList.add('hidden');
         ['topNav', 'botNav', 'userSection'].forEach(id => document.getElementById(id).classList.remove('hidden'));
@@ -193,10 +182,16 @@
         loadSrvCategories();
     }
 
+    function nav(p) {
+        ['userPage', 'historyPage', 'fundPage'].forEach(id => document.getElementById(id).classList.add('hidden'));
+        document.getElementById(p).classList.remove('hidden');
+        if(p === 'historyPage') loadUserHistory();
+    }
+
     function loadSrvCategories() {
         db.ref('services').on('value', s => {
             allServices = s.val() || {};
-            const sel = document.getElementById('srvCat'); sel.innerHTML = '<option value="">အမျိုးအစားရွေးပါ</option>';
+            const sel = document.getElementById('srvCat'); sel.innerHTML = '<option>အမျိုးအစားရွေးပါ</option>';
             for(let cat in allServices) sel.innerHTML += `<option value="${cat}">${cat}</option>`;
         });
     }
@@ -205,10 +200,7 @@
         const cat = document.getElementById('srvCat').value;
         const list = document.getElementById('srvList'); list.innerHTML = "";
         if(allServices[cat]) {
-            for(let k in allServices[cat]) {
-                const item = allServices[cat][k];
-                list.innerHTML += `<option value="${item.rate}">${item.name}</option>`;
-            }
+            for(let id in allServices[cat]) list.innerHTML += `<option value="${allServices[cat][id].rate}">${allServices[cat][id].name}</option>`;
         }
         calcQty();
     }
@@ -220,41 +212,37 @@
 
     function submitOrder() {
         const amt = parseFloat(document.getElementById('buyAmount').value), link = document.getElementById('targetLink').value;
-        const srvName = document.getElementById('srvList').options[document.getElementById('srvList').selectedIndex]?.text;
-        if(!amt || !link || !srvName) return alert("အကုန်ဖြည့်ပါ");
-        if(amt > myBalance) return alert("ငွေမလောက်ပါ");
-        
-        db.ref('users/'+currentUser).update({balance: myBalance - amt}).then(() => {
-            db.ref('orders').push({
-                user: currentUser, service: srvName, link: link, amount: amt, 
-                qty: document.getElementById('resultQty').innerText, status: 'Pending', time: new Date().toLocaleString()
-            });
-            alert("မှာယူမှုအောင်မြင်ပါသည်!"); nav('historyPage');
-        });
+        if(amt > myBalance) return alert("ငွေမလောက်ပါ!");
+        if(amt > 0 && link) {
+            db.ref('users/'+currentUser).update({balance: myBalance - amt});
+            db.ref('orders').push({user:currentUser, service:document.getElementById('srvList').options[document.getElementById('srvList').selectedIndex].text, link:link, amount:amt, qty:document.getElementById('resultQty').innerText, status:'Pending', time:new Date().toLocaleString()});
+            alert("မှာယူမှု အောင်မြင်ပါသည်!"); nav('historyPage');
+        }
     }
 
     function submitFund() {
-        const amt = parseInt(document.getElementById('fAmt').value), proof = document.getElementById('fProof').value;
-        if(!amt || !proof) return alert("အကုန်ဖြည့်ပါ");
-        db.ref('deposits').push({ user: currentUser, amount: amt, proof: proof, status: 'Pending', time: new Date().toLocaleString() });
-        alert("ငွေဖြည့်လွှာတင်ပြီးပါပြီ"); nav('userPage');
+        const amt = parseInt(document.getElementById('fAmt').value), p = document.getElementById('fProof').value;
+        if(amt && p) {
+            db.ref('deposits').push({user:currentUser, amount:amt, proof:p, status:'Pending'});
+            alert("ငွေဖြည့်လွှာ တင်သွင်းပြီးပါပြီ!"); nav('userPage');
+        }
     }
 
-    function loadOrderHistory() {
+    function loadUserHistory() {
         db.ref('orders').orderByChild('user').equalTo(currentUser).on('value', s => {
-            const h = document.getElementById('orderHistory'); h.innerHTML = "";
+            const area = document.getElementById('orderHistory'); area.innerHTML = "";
             s.forEach(c => {
                 const o = c.val();
-                h.innerHTML += `<div class="card"><span class="badge st-${o.status}">${o.status}</span><br><b>${o.service}</b><br>ပမာဏ: ${o.amount} Ks (${o.qty} ခု)</div>`;
+                area.innerHTML += `<div class="card"><span class="badge st-${o.status}">${o.status}</span><br><b>${o.service}</b><br><small>${o.qty} units | ${o.amount} Ks</small></div>`;
             });
         });
     }
 
-    // --- ADMIN FUNCTIONS ---
+    // --- ADMIN LOGIC ---
     function showAdmin() {
         document.getElementById('authPanel').classList.add('hidden');
         ['topNav', 'adminPanel'].forEach(id => document.getElementById(id).classList.remove('hidden'));
-        document.getElementById('userDisplay').innerText = "System Admin";
+        document.getElementById('userDisplay').innerText = "Admin Panel";
         adminTab('users');
     }
 
@@ -262,40 +250,57 @@
         const area = document.getElementById('aContent'); area.innerHTML = "ခဏစောင့်ပါ...";
         if(t === 'users') {
             db.ref('users').on('value', s => {
-                area.innerHTML = "<h4>အသုံးပြုသူများ</h4>";
+                area.innerHTML = "<h4>အသုံးပြုသူများ စာရင်း</h4>";
                 s.forEach(c => {
-                    const d = c.val(); if(c.key === "Admin") return;
-                    area.innerHTML += `<div class="card"><b>${c.key}</b> (Bal: ${d.balance} Ks)<br>Pass: ${d.password}<br>
-                    <button class="btn-sm btn-main" onclick="adjustBal('${c.key}')">ငွေပြင်မည်</button>
-                    <button class="btn-sm btn-red" onclick="db.ref('users/${c.key}').update({isBanned:!${d.isBanned}})">${d.isBanned?'Unban':'Ban'}</button></div>`;
+                    if(c.key === "Admin") return;
+                    const d = c.val();
+                    area.innerHTML += `<div class="card">
+                        <b>${c.key}</b><br>Pass: ${d.password} | Bal: ${d.balance} Ks<br>
+                        <button class="btn-sm btn-main" onclick="adjustBal('${c.key}')">ငွေပြင်မည်</button>
+                        <button class="btn-sm btn-red" onclick="db.ref('users/${c.key}').update({isBanned:!${d.isBanned}})">${d.isBanned?'Unban':'Ban'}</button>
+                    </div>`;
                 });
+            });
+        }
+        if(t === 'services') {
+            db.ref('services').on('value', s => {
+                let html = `<div class="card"><h4>ဝန်ဆောင်မှုအသစ်ထည့်ရန်</h4>
+                    <input id="nCat" placeholder="Category (TikTok Followers)">
+                    <input id="nName" placeholder="Service Name (High Quality)">
+                    <input id="nRate" type="number" step="0.01" placeholder="၁ ကျပ်လျှင်ရမည့် အရေအတွက်">
+                    <button class="btn btn-main" onclick="addSrv()">ပေါင်းထည့်မည်</button></div>`;
+                const data = s.val();
+                for(let cat in data) {
+                    html += `<h5 style="color:var(--primary); margin:10px 0;">${cat}</h5>`;
+                    for(let id in data[cat]) {
+                        html += `<div class="card" style="display:flex; justify-content:space-between;">
+                            <span>${data[cat][id].name} (Rate: ${data[cat][id].rate})</span>
+                            <button class="btn-sm btn-red" onclick="db.ref('services/${cat}/${id}').remove()">ဖျက်မည်</button>
+                        </div>`;
+                    }
+                }
+                area.innerHTML = html;
             });
         }
         if(t === 'deposits') {
             db.ref('deposits').on('value', s => {
                 area.innerHTML = "<h4>ငွေဖြည့်လွှာများ</h4>";
                 s.forEach(c => {
-                    if(c.val().status === 'Pending') {
-                        area.innerHTML += `<div class="card">${c.val().user}: ${c.val().amount} Ks<br>ID: ${c.val().proof}<br>
-                        <button class="btn-main btn-sm" onclick="approveDep('${c.key}','${c.val().user}',${c.val().amount})">အတည်ပြုမည်</button></div>`;
+                    const d = c.val();
+                    if(d.status === 'Pending') {
+                        area.innerHTML += `<div class="card">${d.user}: ${d.amount} Ks (ID: ${d.proof})<br>
+                        <button class="btn-main btn-sm" onclick="approveDep('${c.key}','${d.user}',${d.amount})">အတည်ပြုမည်</button></div>`;
                     }
                 });
             });
-        }
-        if(t === 'services') {
-            area.innerHTML = `<div class="card"><h4>ဝန်ဆောင်မှုအသစ်ထည့်ရန်</h4>
-            <input id="nCat" placeholder="အမျိုးအစား (ဥပမာ- TikTok Followers)">
-            <input id="nName" placeholder="အမည် (ဥပမာ- Real High Quality)">
-            <input id="nRate" type="number" placeholder="၁ ကျပ်လျှင်ရမည့် အရေအတွက်">
-            <button class="btn btn-main" onclick="addSrv()">ပေါင်းထည့်မည်</button></div>`;
         }
         if(t === 'orders') {
             db.ref('orders').on('value', s => {
                 area.innerHTML = "<h4>အော်ဒါအားလုံး</h4>";
                 s.forEach(c => {
                     const o = c.val();
-                    area.innerHTML += `<div class="card"><b>${o.user}</b>: ${o.service}<br>Link: ${o.link}<br>
-                    Status: <select onchange="db.ref('orders/${c.key}').update({status:this.value})">
+                    area.innerHTML += `<div class="card"><b>${o.user}</b> - ${o.service}<br>Link: ${o.link}<br>
+                    <select onchange="db.ref('orders/${c.key}').update({status:this.value})">
                         <option value="Pending" ${o.status==='Pending'?'selected':''}>Pending</option>
                         <option value="Completed" ${o.status==='Completed'?'selected':''}>Completed</option>
                         <option value="Canceled" ${o.status==='Canceled'?'selected':''}>Canceled</option>
@@ -307,21 +312,19 @@
 
     function addSrv() {
         const c = document.getElementById('nCat').value, n = document.getElementById('nName').value, r = document.getElementById('nRate').value;
-        if(c && n && r) {
-            db.ref('services/'+c).push({name: n, rate: parseFloat(r)}).then(() => { alert("အောင်မြင်ပါသည်"); adminTab('services'); });
-        }
+        if(c && n && r) db.ref('services/'+c).push({name:n, rate:parseFloat(r)});
     }
 
     function adjustBal(uid) {
-        const n = prompt(uid + " အတွက် လက်ကျန်ငွေအသစ် ရိုက်ထည့်ပါ:");
-        if(n !== null) db.ref('users/'+uid).update({balance: parseInt(n)});
+        const n = prompt(uid + " အတွက် လက်ကျန်ငွေအသစ်:");
+        if(n) db.ref('users/'+uid).update({balance: parseInt(n)});
     }
 
     function approveDep(k, u, a) {
         db.ref('users/'+u+'/balance').once('value', s => {
             db.ref('users/'+u).update({balance: (s.val()||0) + a});
             db.ref('deposits/'+k).update({status: 'Completed'});
-            alert("ငွေဖြည့်သွင်းပြီးပါပြီ");
+            alert("Approve အောင်မြင်သည်!");
         });
     }
 </script>
