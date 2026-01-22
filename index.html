@@ -3,39 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K-BOOST MM </title>
+    <title>K-BOOST SMM | COMPLETE PANEL</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #00d2ff; --secondary: #ff007b; --bg: #0f172a; --card: #1e293b; }
-        body { font-family: 'Segoe UI', 'Padauk', sans-serif; background: var(--bg); color: white; margin: 0; padding-bottom: 70px; }
+        body { font-family: 'Segoe UI', 'Padauk', sans-serif; background: var(--bg); color: white; margin: 0; padding-bottom: 80px; }
         .container { max-width: 500px; margin: auto; padding: 15px; }
         .hidden { display: none !important; }
-        .card { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid #334155; margin-bottom: 15px; }
+        .card { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid #334155; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; background: #0f172a; color: white; border: 1px solid #334155; box-sizing: border-box; }
-        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .btn-main { background: var(--primary); color: #000; }
         .btn-red { background: var(--secondary); color: white; }
-        .top-bar { background: rgba(0,0,0,0.7); padding: 15px; display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px); }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #111; display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid #333; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; width: auto; margin-top: 5px; }
+        .top-bar { background: rgba(15, 23, 42, 0.9); padding: 15px; display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px); border-bottom: 1px solid #334155; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #111; display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid #333; z-index: 1000; }
         .nav-link { color: #888; font-size: 0.75rem; text-align: center; cursor: pointer; text-decoration: none; }
         .nav-link.active { color: var(--primary); }
-        .badge { padding: 4px 8px; border-radius: 5px; font-size: 11px; }
-        .wallet-box { background: linear-gradient(45deg, #00d2ff, #3a7bd5); padding: 15px; border-radius: 12px; text-align: center; color: #000; margin-bottom: 15px; }
+        .wallet-box { background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); padding: 20px; border-radius: 15px; text-align: center; color: #000; margin-bottom: 20px; }
+        .status-badge { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+        .pending { background: #f59e0b; } .done { background: #10b981; }
+        .history-item { border-bottom: 1px solid #334155; padding: 10px 0; }
     </style>
 </head>
 <body>
 
 <div id="topNav" class="top-bar hidden">
     <span><i class="fas fa-user-circle"></i> <b id="userDisplay"></b></span>
-    <button onclick="logout()" style="background:none; border:none; color:var(--secondary); font-weight:bold;">LOGOUT</button>
+    <button onclick="logout()" style="background:none; border:none; color:var(--secondary); font-weight:bold; cursor:pointer;">LOGOUT</button>
 </div>
 
 <div class="container">
     <div id="authPanel">
         <div class="card" style="text-align: center; margin-top: 50px;">
-            <h2>K-BOOST SMM</h2>
+            <h2 style="color:var(--primary)">K-BOOST SMM</h2>
             <input type="text" id="uIn" placeholder="Username">
             <input type="password" id="pIn" placeholder="Password">
             <button class="btn btn-main" onclick="login()">LOGIN / REGISTER</button>
@@ -51,36 +54,39 @@
         <div id="userPage">
             <div class="card">
                 <h4 style="margin:0 0 10px; color:var(--primary);">🚀 Create Order</h4>
+                <label>Category</label>
                 <select id="srvCat" onchange="loadSrvOptions()"></select>
+                <label>Service</label>
                 <select id="srvList"></select>
-                <input type="url" id="targetLink" placeholder="Target Link (URL)">
-                <button class="btn btn-main" onclick="submitOrder()">ORDER (Wallet ဖြင့် နှုတ်မည်)</button>
+                <input type="url" id="targetLink" placeholder="Link (URL)">
+                <button class="btn btn-main" onclick="submitOrder()">PLACE ORDER</button>
             </div>
         </div>
 
         <div id="topupPage" class="hidden">
             <div class="card">
-                <h4>💰 Top Up Wallet</h4>
-                <p style="font-size:0.8rem; color:#aaa;">Kpay/Wave - 09xxxxxxxxx သို့ ငွေလွှဲပြီး ပြေစာတင်ပါ။</p>
-                <input type="number" id="topupAmount" placeholder="ဖြည့်မည့်ပမာဏ (Ks)">
-                <input type="text" id="topupBill" placeholder="ပြေစာ နောက်ဆုံး ၅ လုံး">
+                <h4>💰ငွေဖြည့်ရန်</h4>
+                <input type="number" id="topupAmount" placeholder="Amount (Ks)">
+                <input type="text" id="topupBill" placeholder="Receipt Last 5 Digits">
                 <input type="file" id="topupImg" accept="image/*">
                 <button class="btn btn-main" onclick="submitTopup()">SUBMIT TOPUP</button>
             </div>
         </div>
 
         <div id="historyPage" class="hidden">
-            <h3>Orders & Topups</h3>
-            <div id="userLogList"></div>
+            <div class="card">
+                <h4><i class="fas fa-history"></i> My Order History</h4>
+                <div id="userOrderHistory"></div>
+            </div>
         </div>
     </div>
 
     <div id="adminPanel" class="hidden">
-        <div style="display:flex; gap:5px; margin-bottom:15px; overflow-x: auto;">
-            <button class="btn btn-main" style="padding:8px;" onclick="adminTab('orders')">Orders</button>
-            <button class="btn btn-main" style="padding:8px;" onclick="adminTab('topups')">Topups</button>
-            <button class="btn btn-main" style="padding:8px;" onclick="adminTab('users')">Users</button>
-            <button class="btn btn-main" style="padding:8px;" onclick="adminTab('services')">Services</button>
+        <div style="display:flex; gap:5px; margin-bottom:15px; overflow-x:auto;">
+            <button class="btn btn-main btn-sm" onclick="adminTab('orders')">Orders</button>
+            <button class="btn btn-main btn-sm" onclick="adminTab('topups')">Topups</button>
+            <button class="btn btn-main btn-sm" onclick="adminTab('users')">Users</button>
+            <button class="btn btn-main btn-sm" onclick="adminTab('services')">Services</button>
         </div>
         <div id="aContent"></div>
     </div>
@@ -89,7 +95,7 @@
 <nav id="botNav" class="bottom-nav hidden">
     <div class="nav-link active" id="nHome" onclick="nav('userPage')"><i class="fas fa-shopping-cart"></i><br>Shop</div>
     <div class="nav-link" id="nTopup" onclick="nav('topupPage')"><i class="fas fa-wallet"></i><br>Topup</div>
-    <div class="nav-link" id="nHistory" onclick="nav('historyPage')"><i class="fas fa-history"></i><br>History</div>
+    <div class="nav-link" id="nHistory" onclick="nav('historyPage')"><i class="fas fa-list"></i><br>History</div>
 </nav>
 
 <script>
@@ -104,167 +110,133 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-
-    let currentUser = null;
-    let myBalance = 0;
+    let currentUser = null, myBalance = 0;
 
     function login() {
-        const u = document.getElementById('uIn').value.trim();
-        const p = document.getElementById('pIn').value.trim();
-        if(u === "KBOOSTMM" && p === "090635") {
-            currentUser = "Admin"; showAdmin();
-        } else {
-            db.ref('users/' + u).once('value', s => {
+        const u = document.getElementById('uIn').value.trim(), p = document.getElementById('pIn').value.trim();
+        if(u === "KBOOSTMM" && p === "090635") { currentUser = "Admin"; showAdmin(); }
+        else {
+            db.ref('users/'+u).once('value', s => {
                 const d = s.val();
                 if(d) {
                     if(d.isBanned) return alert("Banned!");
-                    if(d.password === p) { currentUser = u; showUser(); }
-                    else alert("Wrong Password");
-                } else {
-                    db.ref('users/' + u).set({ password: p, balance: 0, isBanned: false }).then(showUser);
-                    currentUser = u;
-                }
+                    if(d.password === p) { currentUser = u; showUser(); } else alert("Wrong Password");
+                } else { db.ref('users/'+u).set({password:p, balance:0, isBanned:false}).then(showUser); currentUser = u; }
             });
         }
     }
 
     function showUser() {
         document.getElementById('authPanel').classList.add('hidden');
-        document.getElementById('topNav').classList.remove('hidden');
-        document.getElementById('botNav').classList.remove('hidden');
-        document.getElementById('userSection').classList.remove('hidden');
+        ['topNav', 'botNav', 'userSection'].forEach(id => document.getElementById(id).classList.remove('hidden'));
         document.getElementById('userDisplay').innerText = currentUser;
-        db.ref('users/' + currentUser + '/balance').on('value', s => {
-            myBalance = s.val() || 0;
-            document.getElementById('userBalance').innerText = myBalance;
-        });
+        db.ref('users/'+currentUser+'/balance').on('value', s => { myBalance = s.val()||0; document.getElementById('userBalance').innerText = myBalance; });
         loadSrvCategories();
     }
 
     function loadSrvCategories() {
         db.ref('services').on('value', s => {
-            const catSelect = document.getElementById('srvCat');
-            catSelect.innerHTML = "";
-            for(let cat in s.val()) catSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
+            const sel = document.getElementById('srvCat'); sel.innerHTML = "";
+            for(let cat in s.val()) sel.innerHTML += `<option value="${cat}">${cat}</option>`;
             loadSrvOptions();
         });
     }
 
     function loadSrvOptions() {
         const cat = document.getElementById('srvCat').value;
-        db.ref('services/' + cat).once('value', s => {
-            const list = document.getElementById('srvList');
-            list.innerHTML = "";
-            s.forEach(c => {
-                const v = c.val();
-                list.innerHTML += `<option value="${v.price}">${v.name} - ${v.price} Ks</option>`;
-            });
+        db.ref('services/'+cat).once('value', s => {
+            const list = document.getElementById('srvList'); list.innerHTML = "";
+            s.forEach(c => { list.innerHTML += `<option value="${c.val().price}">${c.val().name} - ${c.val().price} Ks</option>`; });
         });
     }
 
     function submitOrder() {
-        const srv = document.getElementById('srvList');
-        const price = parseInt(srv.value);
-        if(myBalance < price) return alert("လက်ကျန်ငွေ မလုံလောက်ပါ။ ငွေအရင်ဖြည့်ပါ။");
-        
-        const link = document.getElementById('targetLink').value;
+        const srv = document.getElementById('srvList'), price = parseInt(srv.value), link = document.getElementById('targetLink').value;
+        if(myBalance < price) return alert("လက်ကျန်ငွေမလောက်ပါ");
         if(!link) return alert("Link ထည့်ပါ");
-
-        if(confirm(price + " Ks နှုတ်ယူမည်ကို သဘောတူပါသလား?")) {
-            db.ref('users/' + currentUser).update({ balance: myBalance - price });
-            db.ref('orders').push({
-                user: currentUser, service: srv.options[srv.selectedIndex].text,
-                link: link, status: 'Pending', time: new Date().toLocaleString()
-            });
-            alert("Order တင်ပြီးပါပြီ!");
+        if(confirm(price+" Ks နှုတ်ယူမည်လား?")) {
+            db.ref('users/'+currentUser).update({balance: myBalance - price});
+            db.ref('orders').push({user:currentUser, service:srv.options[srv.selectedIndex].text, link:link, status:'Pending', time:new Date().toLocaleString()});
+            alert("Order Success!"); nav('historyPage');
         }
     }
 
     function submitTopup() {
-        const amt = document.getElementById('topupAmount').value;
-        const bill = document.getElementById('topupBill').value;
-        const file = document.getElementById('topupImg').files[0];
+        const amt = document.getElementById('topupAmount').value, file = document.getElementById('topupImg').files[0];
         if(!amt || !file) return alert("အချက်အလက်ပြည့်စုံစွာဖြည့်ပါ");
-
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
+        const reader = new FileReader(); reader.readAsDataURL(file);
         reader.onload = () => {
-            db.ref('topups').push({
-                user: currentUser, amount: parseInt(amt), bill: bill,
-                img: reader.result, status: 'Pending', time: new Date().toLocaleString()
-            });
-            alert("ငွေဖြည့်လွှာ တင်ပြီးပါပြီ။ ခဏစောင့်ပေးပါ။");
-            nav('historyPage');
+            db.ref('topups').push({user:currentUser, amount:parseInt(amt), img:reader.result, status:'Pending', time:new Date().toLocaleString()});
+            alert("တင်ပြပြီးပါပြီ"); nav('historyPage');
         };
     }
 
-    // ADMIN FUNCTIONS
-    function showAdmin() {
-        document.getElementById('authPanel').classList.add('hidden');
-        document.getElementById('topNav').classList.remove('hidden');
-        document.getElementById('adminPanel').classList.remove('hidden');
-        adminTab('orders');
+    function renderUserHistory() {
+        db.ref('orders').orderByChild('user').equalTo(currentUser).on('value', s => {
+            const div = document.getElementById('userOrderHistory'); div.innerHTML = "";
+            s.forEach(c => {
+                const o = c.val(); div.innerHTML += `<div class="history-item">
+                <span class="status-badge ${o.status.toLowerCase()}">${o.status}</span><br>
+                <b>${o.service}</b><br><small>${o.time}</small><br><span style="color:cyan">${o.link}</span></div>`;
+            });
+        });
     }
 
     function adminTab(t) {
-        const area = document.getElementById('aContent');
-        area.innerHTML = "Loading...";
-        if(t === 'topups') {
-            db.ref('topups').on('value', s => {
-                area.innerHTML = "<h4>Pending Topups</h4>";
-                s.forEach(c => {
-                    const top = c.val();
-                    if(top.status === 'Pending') {
-                        area.innerHTML += `<div class="card">
-                            <b>User: ${top.user} (${top.amount} Ks)</b><br>
-                            <img src="${top.img}" style="width:100px;"><br>
-                            <button class="btn btn-main" onclick="approveTopup('${c.key}', '${top.user}', ${top.amount})">Approve</button>
-                        </div>`;
-                    }
-                });
+        const area = document.getElementById('aContent'); area.innerHTML = "Loading...";
+        if(t==='services') {
+            area.innerHTML = `<div class="card"><h4>Add Service</h4><input id="nCat" placeholder="Category"><input id="nNam" placeholder="Name"><input id="nPric" type="number" placeholder="Price">
+            <button class="btn btn-main" onclick="saveSrv()">Save Service</button></div><div id="aSrvList"></div>`;
+            renderAdminSrv();
+        }
+        if(t==='users') {
+            db.ref('users').on('value', s => {
+                area.innerHTML = "<h4>Users</h4>";
+                s.forEach(c => { area.innerHTML += `<div class="card"><b>${c.key}</b><br>
+                Pass: <input id="p_${c.key}" value="${c.val().password}" style="width:80px"> <button class="btn-main btn-sm" onclick="db.ref('users/${c.key}').update({password:document.getElementById('p_${c.key}').value})">Update</button>
+                <br>Bal: ${c.val().balance} Ks <button class="btn-red btn-sm" onclick="db.ref('users/${c.key}').update({isBanned:!${c.val().isBanned}})">${c.val().isBanned?'Unban':'Ban'}</button></div>`; });
             });
         }
-        if(t === 'orders') {
+        if(t==='orders') {
             db.ref('orders').on('value', s => {
                 area.innerHTML = "<h4>Orders</h4>";
-                s.forEach(c => {
-                    const o = c.val();
-                    area.innerHTML += `<div class="card">
-                        <b>${o.user}</b> - ${o.service}<br>
-                        <small>${o.link}</small><br>
-                        Status: ${o.status}
-                        <button class="btn btn-main" onclick="db.ref('orders/${c.key}').update({status:'Done'})">Mark Done</button>
-                    </div>`;
-                });
+                s.forEach(c => { area.innerHTML += `<div class="card"><b>${c.val().user}</b><br>${c.val().service}<br>${c.val().link}<br>
+                <button class="btn-main btn-sm" onclick="db.ref('orders/${c.key}').update({status:'Done'})">Done</button></div>`; });
+            });
+        }
+        if(t==='topups') {
+            db.ref('topups').on('value', s => {
+                area.innerHTML = "<h4>Topups</h4>";
+                s.forEach(c => { if(c.val().status==='Pending') area.innerHTML += `<div class="card"><b>${c.val().user} (${c.val().amount} Ks)</b><br><img src="${c.val().img}" style="width:100%"><br>
+                <button class="btn-main btn-sm" onclick="approveT('${c.key}','${c.val().user}',${c.val().amount})">Approve</button></div>`; });
             });
         }
     }
 
-    function approveTopup(key, user, amt) {
-        db.ref('users/' + user + '/balance').once('value', s => {
-            const current = s.val() || 0;
-            db.ref('users/' + user).update({ balance: current + amt });
-            db.ref('topups/' + key).update({ status: 'Approved' });
-            alert("Approved!");
+    function saveSrv() {
+        const c = document.getElementById('nCat').value, n = document.getElementById('nNam').value, p = document.getElementById('nPric').value;
+        if(c && n && p) db.ref('services/'+c).push({name:n, price:parseInt(p)}).then(()=>{alert("Saved"); adminTab('services');});
+    }
+
+    function renderAdminSrv() {
+        db.ref('services').on('value', s => {
+            const d = document.getElementById('aSrvList'); d.innerHTML = "";
+            s.forEach(cat => { d.innerHTML += `<h5>${cat.key}</h5>`; cat.forEach(srv => {
+                d.innerHTML += `<div class="card" style="padding:10px">${srv.val().name} - ${srv.val().price} Ks <button class="btn-red btn-sm" onclick="db.ref('services/${cat.key}/${srv.key}').remove()">Delete</button></div>`;
+            }); });
         });
     }
 
+    function approveT(k,u,a) { db.ref('users/'+u+'/balance').once('value', s => { db.ref('users/'+u).update({balance:(s.val()||0)+a}); db.ref('topups/'+k).update({status:'Approved'}); alert("Approved"); }); }
+    function showAdmin() { document.getElementById('authPanel').classList.add('hidden'); ['topNav', 'adminPanel'].forEach(id => document.getElementById(id).classList.remove('hidden')); adminTab('orders'); }
     function nav(p) {
         ['userPage', 'topupPage', 'historyPage'].forEach(id => document.getElementById(id).classList.add('hidden'));
         document.getElementById(p).classList.remove('hidden');
-        if(p === 'historyPage') renderLogs();
+        ['nHome', 'nTopup', 'nHistory'].forEach(id => document.getElementById(id).classList.remove('active'));
+        document.getElementById('n'+p.replace('Page','').charAt(0).toUpperCase() + p.replace('Page','').slice(1)).classList.add('active');
+        if(p==='historyPage') renderUserHistory();
     }
-
-    function renderLogs() {
-        db.ref('orders').orderByChild('user').equalTo(currentUser).once('value', s => {
-            let h = "<h4>Orders</h4>";
-            s.forEach(c => { h += `<div class='card'>${c.val().service} - ${c.val().status}</div>`; });
-            document.getElementById('userLogList').innerHTML = h;
-        });
-    }
-
     function logout() { location.reload(); }
 </script>
 </body>
 </html>
-
