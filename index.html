@@ -3,29 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K-BOOST MM</title>
+    <title>K-BOOST MM </title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         :root { --primary: #00d2ff; --secondary: #ff007b; --bg: #0b0f1a; --card: #161b2c; --border: #2d364f; }
-        body, html { height: 100%; margin: 0; font-family: 'Padauk', sans-serif; background: var(--bg); color: white; overflow-x: hidden; }
+        body, html { height: 100%; margin: 0; font-family: 'Padauk', 'Poppins', sans-serif; background: var(--bg); color: white; }
         .container { max-width: 500px; margin: auto; padding: 15px; padding-bottom: 80px; }
         .hidden { display: none !important; }
         .card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px; }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; background: #0b0f1a; color: white; border: 1px solid var(--border); box-sizing: border-box; outline: none; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; background: #0b0f1a; color: white; border: 1px solid var(--border); box-sizing: border-box; outline: none; font-family: 'Padauk'; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-family: 'Padauk'; }
         .btn-main { background: var(--primary); color: #000; }
         .btn-red { background: var(--secondary); color: white; }
         .btn-sm { padding: 6px 10px; font-size: 11px; border-radius: 5px; cursor: pointer; border: none; margin: 2px; font-weight: bold; }
         
-        /* --- SLIDING AUTH UI --- */
+        /* Sliding Auth UI */
         .auth-container { width: 100%; max-width: 400px; margin: 50px auto; position: relative; overflow: hidden; border-radius: 20px; background: var(--card); border: 1px solid var(--border); }
         .auth-tabs { display: flex; justify-content: space-around; padding: 20px 0; position: relative; }
         .auth-tabs span { cursor: pointer; font-weight: bold; z-index: 2; transition: 0.3s; color: #666; }
         .auth-tabs span.active { color: var(--primary); }
-        .tab-indicator { position: absolute; bottom: 15px; height: 3px; width: 40px; background: var(--primary); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-radius: 5px; }
+        .tab-indicator { position: absolute; bottom: 15px; height: 3px; width: 40px; background: var(--primary); transition: 0.3s; border-radius: 5px; }
         .form-slider { display: flex; width: 200%; transition: 0.5s ease-in-out; }
         .auth-form { width: 50%; padding: 0 25px 30px 25px; box-sizing: border-box; }
 
@@ -34,35 +34,36 @@
         .nav-link { color: #666; font-size: 11px; text-align: center; cursor: pointer; text-decoration: none; }
         .nav-link.active { color: var(--primary); }
         .wallet-box { background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); padding: 20px; border-radius: 15px; text-align: center; color: #000; margin-bottom: 15px; }
+        
+        .status-badge { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+        .st-Pending { background: #6b7280; } .st-Completed { background: #10b981; }
     </style>
 </head>
 <body>
 
 <div id="topNav" class="top-bar hidden">
-    <span><i class="fas fa-user-shield"></i> <b id="userDisplay"></b></span>
-    <button onclick="logout()" style="background:none; border:none; color:var(--secondary); font-weight:bold;">Logout</button>
+    <span><i class="fas fa-user-circle"></i> <b id="userDisplay"></b></span>
+    <button onclick="location.reload()" style="background:none; border:none; color:var(--secondary); font-weight:bold;">ထွက်ရန်</button>
 </div>
 
 <div class="container">
     <div id="authPanel">
         <div class="auth-container">
             <div class="auth-tabs">
-                <span id="tabLogin" class="active" onclick="toggleAuth('login')">LOGIN</span>
-                <span id="tabSignup" onclick="toggleAuth('signup')">SIGNUP</span>
+                <span id="tabLogin" class="active" onclick="toggleAuth('login')">အကောင့်ဝင်ရန်</span>
+                <span id="tabSignup" onclick="toggleAuth('signup')">အကောင့်သစ်ဖွင့်ရန်</span>
                 <div id="indicator" class="tab-indicator" style="left: 19%;"></div>
             </div>
             <div class="form-slider" id="formSlider">
                 <div class="auth-form">
-                    <h3 style="text-align:center; color:var(--primary);">Welcome Back</h3>
                     <input type="text" id="uIn" placeholder="အသုံးပြုသူအမည်">
                     <input type="password" id="pIn" placeholder="လျှို့ဝှက်နံပါတ်">
                     <button class="btn btn-main" onclick="login()">ဝင်မည်</button>
                 </div>
                 <div class="auth-form">
-                    <h3 style="text-align:center; color:var(--secondary);">New Account</h3>
-                    <input type="text" id="uUp" placeholder="နာမည်အသစ်ပေးပါ">
-                    <input type="password" id="pUp" placeholder="လျှို့ဝှက်နံပါတ်ပေးပါ">
-                    <button class="btn btn-red" onclick="signup()">အကောင့်ဖွင့်မည်</button>
+                    <input type="text" id="uUp" placeholder="အသုံးပြုသူအမည်သစ်">
+                    <input type="password" id="pUp" placeholder="လျှို့ဝှက်နံပါတ်အသစ်">
+                    <button class="btn btn-red" onclick="signup()">ဖွင့်မည်</button>
                 </div>
             </div>
         </div>
@@ -70,20 +71,20 @@
 
     <div id="userSection" class="hidden">
         <div class="wallet-box">
-            <small>လက်ရှိလက်ကျန်ငွေ</small><br>
+            <small>လက်ရှိလက်ကျန်ငွေ</small>
             <h2 style="margin:0;"><span id="userBalance">0</span> Ks</h2>
             <button class="btn-sm" style="background:white; color:black; margin-top:5px;" onclick="nav('fundPage')">+ ငွေဖြည့်မည်</button>
         </div>
 
         <div id="userPage">
             <div class="card">
-                <h4><i class="fas fa-shopping-cart"></i> မှာယူရန်</h4>
+                <h4><i class="fas fa-shopping-cart"></i> ဝန်ဆောင်မှုမှာယူရန်</h4>
                 <select id="srvCat" onchange="loadSrvOptions()"></select>
                 <select id="srvList" onchange="calcQty()"></select>
-                <input type="url" id="targetLink" placeholder="Link">
-                <input type="number" id="buyAmount" placeholder="Ks ပမာဏ" oninput="calcQty()">
+                <input type="url" id="targetLink" placeholder="Link ထည့်ပါ">
+                <input type="number" id="buyAmount" placeholder="ဝယ်ယူမည့်ငွေပမာဏ (Ks)" oninput="calcQty()">
                 <div style="background:#000; padding:15px; border-radius:10px; text-align:center; border:1px dashed var(--border);">
-                    အရေအတွက်: <b id="resultQty" style="color:var(--primary); font-size:22px;">0</b>
+                    ရရှိမည့်အရေအတွက်: <b id="resultQty" style="color:var(--primary); font-size:22px;">0</b>
                 </div>
                 <button class="btn btn-main" style="margin-top:15px;" onclick="submitOrder()">ယခုမှာယူမည်</button>
             </div>
@@ -91,11 +92,11 @@
 
         <div id="fundPage" class="hidden">
             <div class="card">
-                <h4><i class="fas fa-wallet"></i> ငွေဖြည့်ရန်</h4>
-                <p style="font-size:13px; color:var(--primary);">Kpay: 09970573598</p>
+                <h4>ငွေဖြည့်သွင်းရန်</h4>
+                <p style="font-size:12px; color:var(--primary);">Kpay: 09970573598(Chit Thae Oo)သို့လွှဲပါ။</p>
                 <input type="number" id="fAmt" placeholder="ဖြည့်မည့်ပမာဏ (Ks)">
-                <input type="text" id="fProof" placeholder="Transaction ID (နောက်ဆုံး ၆ လုံး)">
-                <button class="btn btn-main" onclick="submitFund()">ငွေဖြည့်လွှာ တင်မည်</button>
+                <input type="text" id="fProof" placeholder="Transaction ID 6 လုံး">
+                <button class="btn btn-main" onclick="submitFund()">ငွေဖြည့်လွှာတင်မည်</button>
             </div>
         </div>
 
@@ -105,11 +106,13 @@
     </div>
 
     <div id="adminPanel" class="hidden">
-        <div class="card" style="border: 2px solid gold; background: #1a1a2e;">
-            <h4 style="margin:0; color:gold;"><i class="fas fa-shield-alt"></i> ADMIN MASTER</h4>
+        <div class="card" style="border: 2px solid gold;">
+            <h4 style="color:gold;"><i class="fas fa-user-shield"></i> Admin Master Control</h4>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:10px;">
                 <button class="btn-main btn-sm" onclick="adminTab('deposits')">ငွေဖြည့်လွှာများ</button>
-                <button class="btn-main btn-sm" onclick="adminTab('orders')">အော်ဒါများ</button>
+                <button class="btn-main btn-sm" onclick="adminTab('users')">အသုံးပြုသူများ</button>
+                <button class="btn-main btn-sm" onclick="adminTab('orders')">အော်ဒါအားလုံး</button>
+                <button class="btn-main btn-sm" onclick="adminTab('services')">ဝန်ဆောင်မှုပြင်ရန်</button>
             </div>
         </div>
         <div id="aContent"></div>
@@ -117,8 +120,9 @@
 </div>
 
 <nav id="botNav" class="bottom-nav hidden">
-    <div class="nav-link" id="nHome" onclick="nav('userPage')"><i class="fas fa-home"></i><br>ပင်မ</div>
-    <div class="nav-link" id="nHistory" onclick="nav('historyPage')"><i class="fas fa-history"></i><br>မှတ်တမ်း</div>
+    <div class="nav-link active" onclick="nav('userPage')"><i class="fas fa-home"></i><br>ပင်မ</div>
+    <div class="nav-link" onclick="nav('historyPage')"><i class="fas fa-list"></i><br>မှတ်တမ်း</div>
+    <div class="nav-link" onclick="nav('fundPage')"><i class="fas fa-wallet"></i><br>ငွေဖြည့်</div>
 </nav>
 
 <script>
@@ -145,7 +149,9 @@
     function signup() {
         const u = document.getElementById('uUp').value.trim(), p = document.getElementById('pUp').value.trim();
         if(u && p) {
-            db.ref('users/'+u).set({password:p, balance:0}).then(() => { alert("Success!"); toggleAuth('login'); });
+            db.ref('users/'+u).set({password:p, balance:0, isBanned:false}).then(() => {
+                alert("အကောင့်ဖွင့်ခြင်းအောင်မြင်ပါသည်!"); toggleAuth('login');
+            });
         }
     }
 
@@ -154,7 +160,11 @@
         if(u === "KBOOSTMM" && p === "090635") { currentUser = "Admin"; showAdmin(); }
         else if(u && p) {
             db.ref('users/'+u).once('value', s => {
-                if(s.val() && s.val().password === p) { currentUser = u; showUser(); } else alert("Error!");
+                const d = s.val();
+                if(d && d.password === p) {
+                    if(d.isBanned) return alert("သင့်အကောင့် ပိတ်ခံထားရပါသည်!");
+                    currentUser = u; showUser();
+                } else alert("အမည် သို့မဟုတ် လျှို့ဝှက်နံပါတ် မှားနေပါသည်!");
             });
         }
     }
@@ -163,71 +173,74 @@
         document.getElementById('authPanel').classList.add('hidden');
         ['topNav', 'botNav', 'userSection'].forEach(id => document.getElementById(id).classList.remove('hidden'));
         document.getElementById('userDisplay').innerText = currentUser;
-        db.ref('users/'+currentUser+'/balance').on('value', s => { myBalance = s.val() || 0; document.getElementById('userBalance').innerText = myBalance; });
+        db.ref('users/'+currentUser+'/balance').on('value', s => {
+            myBalance = s.val() || 0;
+            document.getElementById('userBalance').innerText = myBalance.toLocaleString();
+        });
         loadSrvCategories();
     }
 
     function showAdmin() {
         document.getElementById('authPanel').classList.add('hidden');
         ['topNav', 'adminPanel'].forEach(id => document.getElementById(id).classList.remove('hidden'));
-        adminTab('deposits');
-    }
-
-    // --- DEPOSIT SYSTEM ---
-    function submitFund() {
-        const amt = parseInt(document.getElementById('fAmt').value), proof = document.getElementById('fProof').value;
-        if(amt && proof) {
-            db.ref('deposits').push({
-                user: currentUser,
-                amount: amt,
-                proof: proof,
-                status: 'Pending',
-                time: new Date().toLocaleString()
-            }).then(() => {
-                alert("ငွေဖြည့်လွှာ တင်သွင်းပြီးပါပြီ။ Admin အတည်ပြုသည်အထိ စောင့်ပါ။");
-                nav('userPage');
-            });
-        }
+        document.getElementById('userDisplay').innerText = "System Admin";
+        adminTab('users');
     }
 
     function adminTab(t) {
-        const area = document.getElementById('aContent'); area.innerHTML = "Loading...";
-        if(t === 'deposits') {
-            db.ref('deposits').on('value', s => {
-                area.innerHTML = "<h4>Deposit Requests</h4>";
+        const area = document.getElementById('aContent'); area.innerHTML = "ခဏစောင့်ပါ...";
+        if(t === 'users') {
+            db.ref('users').on('value', s => {
+                area.innerHTML = "<h4><i class='fas fa-users'></i> အသုံးပြုသူများ</h4>";
                 s.forEach(c => {
                     const d = c.val();
-                    if(d.status === 'Pending') {
-                        area.innerHTML += `
-                        <div class="card">
-                            <b>User: ${d.user}</b><br>Amount: ${d.amount} Ks<br>ID: ${d.proof}<br>
-                            <button class="btn-main btn-sm" onclick="approveDeposit('${c.key}', '${d.user}', ${d.amount})">Approve (ငွေထည့်မည်)</button>
-                            <button class="btn-red btn-sm" onclick="db.ref('deposits/${c.key}').update({status:'Rejected'})">Reject</button>
+                    if(c.key !== "Admin") {
+                        area.innerHTML += `<div class="card">
+                            <b>${c.key}</b><br>
+                            Password: <code style="color:var(--secondary);">${d.password}</code><br>
+                            Balance: ${d.balance.toLocaleString()} Ks<br>
+                            <button class="btn-sm btn-main" onclick="adjustBal('${c.key}')">ငွေပြင်မည်</button>
+                            <button class="btn-sm btn-red" onclick="db.ref('users/${c.key}').update({isBanned:!${d.isBanned}})">
+                                ${d.isBanned ? 'Unban' : 'Ban'}
+                            </button>
                         </div>`;
                     }
                 });
             });
         }
-        // ... Other admin tabs (Orders etc) ...
+        if(t === 'deposits') {
+            db.ref('deposits').on('value', s => {
+                area.innerHTML = "<h4>ငွေဖြည့်လွှာများ</h4>";
+                s.forEach(c => {
+                    if(c.val().status === 'Pending') {
+                        area.innerHTML += `<div class="card">${c.val().user}: ${c.val().amount} Ks<br>ID: ${c.val().proof}<br>
+                        <button class="btn-main btn-sm" onclick="approveDep('${c.key}','${c.val().user}',${c.val().amount})">အတည်ပြုမည်</button></div>`;
+                    }
+                });
+            });
+        }
     }
 
-    function approveDeposit(key, uid, amt) {
-        db.ref('users/'+uid+'/balance').once('value', s => {
-            let currentBal = s.val() || 0;
-            db.ref('users/'+uid).update({ balance: currentBal + amt });
-            db.ref('deposits/'+key).update({ status: 'Success' });
-            alert("ငွေဖြည့်သွင်းမှု အောင်မြင်ပါသည်။");
+    function adjustBal(uid) {
+        const n = prompt(uid + " အတွက် လက်ကျန်ငွေအသစ် ရိုက်ထည့်ပါ:");
+        if(n !== null) db.ref('users/'+uid).update({balance: parseInt(n)});
+    }
+
+    function approveDep(k, u, a) {
+        db.ref('users/'+u+'/balance').once('value', s => {
+            db.ref('users/'+u).update({balance: (s.val()||0) + a});
+            db.ref('deposits/'+k).update({status: 'Completed'});
+            alert("ငွေဖြည့်ခြင်း အောင်မြင်သည်!");
         });
     }
 
     // --- UTILS ---
     function nav(p) { ['userPage', 'historyPage', 'fundPage'].forEach(id => document.getElementById(id).classList.add('hidden')); document.getElementById(p).classList.remove('hidden'); }
-    function loadSrvCategories() { db.ref('services').on('value', s => { allServices = s.val() || {}; const sel = document.getElementById('srvCat'); sel.innerHTML = '<option>ရွေးပါ</option>'; for(let cat in allServices) sel.innerHTML += `<option value="${cat}">${cat}</option>`; }); }
+    function loadSrvCategories() { db.ref('services').on('value', s => { allServices = s.val() || {}; const sel = document.getElementById('srvCat'); sel.innerHTML = '<option>အမျိုးအစားရွေးပါ</option>'; for(let cat in allServices) sel.innerHTML += `<option value="${cat}">${cat}</option>`; }); }
     function loadSrvOptions() { const cat = document.getElementById('srvCat').value; const list = document.getElementById('srvList'); list.innerHTML = ""; if(allServices[cat]) { for(let k in allServices[cat]) list.innerHTML += `<option value="${allServices[cat][k].rate}">${allServices[cat][k].name}</option>`; } calcQty(); }
     function calcQty() { const r = parseFloat(document.getElementById('srvList').value)||0, a = parseFloat(document.getElementById('buyAmount').value)||0; document.getElementById('resultQty').innerText = Math.floor(r*a).toLocaleString(); }
-    function submitOrder() { /* ... Same as before ... */ }
-    function logout() { location.reload(); }
+    function submitOrder() { /* မှာယူမှု စနစ် */ }
+    function submitFund() { /* ငွေဖြည့်လွှာတင်ခြင်း */ }
 </script>
 </body>
-</hthththttWav
-
+</html>
