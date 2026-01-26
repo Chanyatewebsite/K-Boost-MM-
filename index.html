@@ -4,329 +4,404 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>K-BOOST MM </title>
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        :root { --primary: #00d2ff; --secondary: #ff007b; --bg: #0b0f1a; --card: #161b2c; --border: #2d364f; }
-        body, html { height: 100%; margin: 0; font-family: 'Padauk', 'Poppins', sans-serif; background: var(--bg); color: white; }
-        .container { max-width: 500px; margin: auto; padding: 15px; padding-bottom: 80px; }
-        .hidden { display: none !important; }
-        .card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px; }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; background: #0b0f1a; color: white; border: 1px solid var(--border); box-sizing: border-box; outline: none; font-family: 'Padauk'; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-family: 'Padauk'; transition: 0.3s; }
-        .btn-main { background: var(--primary); color: #000; }
-        .btn-red { background: var(--secondary); color: white; }
-        .btn-sm { padding: 6px 10px; font-size: 11px; border-radius: 5px; cursor: pointer; border: none; margin: 2px; font-weight: bold; }
-        
-        /* Sliding Auth */
-        .auth-container { width: 100%; max-width: 400px; margin: 50px auto; overflow: hidden; border-radius: 20px; background: var(--card); border: 1px solid var(--border); }
-        .auth-tabs { display: flex; justify-content: space-around; padding: 20px 0; position: relative; }
-        .auth-tabs span { cursor: pointer; font-weight: bold; z-index: 2; color: #666; }
-        .auth-tabs span.active { color: var(--primary); }
-        .form-slider { display: flex; width: 200%; transition: 0.5s ease-in-out; }
-        .auth-form { width: 50%; padding: 0 25px 30px 25px; box-sizing: border-box; }
+        :root {
+            --primary: #00d2ff; --bg: #0b0f1a; --card: #161c2d;
+            --border: #242f48; --text-main: #ffffff; --text-dim: #94a3b8;
+            --red: #ef4444; --green: #10b981; --yellow: #ffb800;
+            --grad: linear-gradient(135deg, #00d2ff, #0072ff);
+        }
 
-        .top-bar { background: rgba(11, 15, 26, 0.95); padding: 15px; display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border); }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; justify-content: space-around; padding: 10px; border-top: 1px solid #333; }
-        .nav-link { color: #666; font-size: 11px; text-align: center; cursor: pointer; }
-        .nav-link.active { color: var(--primary); }
-        .wallet-box { background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); padding: 20px; border-radius: 15px; text-align: center; color: #000; margin-bottom: 15px; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        body, html { margin: 0; padding: 0; font-family: 'Poppins', 'Padauk', sans-serif; background: var(--bg); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
+        .container { max-width: 500px; margin: auto; min-height: 100vh; position: relative; padding-bottom: 80px; }
+        .hidden { display: none !important; }
+
+        /* Card Style */
+        .card { background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid var(--border); margin: 15px; }
+        .balance-card { background: var(--grad); border: none; color: #000; padding: 25px; border-radius: 24px; position: relative; overflow: hidden; }
+
+        /* Auth */
+        .logo-main { font-size: 35px; font-weight: 800; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin: 50px 0 30px; }
         
-        .badge { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; }
-        .st-Pending { background: #f59e0b; } .st-Completed { background: #10b981; } .st-Canceled { background: #ef4444; }
+        input, select, textarea {
+            width: 100%; padding: 14px; margin: 8px 0 15px 0; border-radius: 12px;
+            background: #0f172a; color: white; border: 1px solid var(--border); font-family: inherit; font-size: 14px;
+        }
+
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; transition: 0.3s; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-main { background: var(--grad); color: #000; }
+        .btn-sm { padding: 8px 12px; font-size: 11px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; }
+
+        /* Nav */
+        .top-bar { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 1000; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(22, 28, 45, 0.95); display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid var(--border); z-index: 1000; backdrop-filter: blur(10px); }
+        .nav-link { color: var(--text-dim); font-size: 18px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+        .nav-link span { font-size: 10px; font-weight: 600; }
+        .nav-link.active { color: var(--primary); }
+
+        /* Admin Specific */
+        .admin-tab-bar { display: flex; overflow-x: auto; gap: 8px; padding: 15px; background: var(--card); border-bottom: 1px solid var(--border); scrollbar-width: none; }
+        .tab-btn { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: #0f172a; color: var(--text-dim); white-space: nowrap; cursor: pointer; font-size: 12px; }
+        .tab-btn.active { background: var(--primary); color: #000; font-weight: bold; }
+        
+        .info-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; display: block; margin-top: 10px; }
+        .user-detail-card { background: #0f172a; border: 1px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 10px; }
+        
+        .badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .st-Pending { background: #524214; color: var(--yellow); }
+        .st-Completed { background: #064e3b; color: var(--green); }
+        .st-Canceled { background: #451a1a; color: var(--red); }
     </style>
 </head>
 <body>
 
-<div id="topNav" class="top-bar hidden">
-    <span><i class="fas fa-user-circle"></i> <b id="userDisplay"></b></span>
-    <button onclick="location.reload()" style="background:none; border:none; color:var(--secondary); font-weight:bold;">ထွက်ရန်</button>
-</div>
-
 <div class="container">
-    <div id="authPanel">
-        <div class="auth-container">
-            <div class="auth-tabs">
-                <span id="tLog" class="active" onclick="toggleAuth('login')">အကောင့်ဝင်ရန်</span>
-                <span id="tSig" onclick="toggleAuth('signup')">အကောင့်သစ်ဖွင့်ရန်</span>
+    <!-- Top Nav -->
+    <div id="topNav" class="top-bar hidden">
+        <div style="font-weight: 800; font-size: 18px; color: var(--primary);">K-BOOST MM</div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span id="userBadge" style="font-size: 11px; background: #1e293b; padding: 4px 10px; border-radius: 20px;"></span>
+            <i class="fas fa-sign-out-alt" style="color: var(--red); cursor: pointer;" onclick="location.reload()"></i>
+        </div>
+    </div>
+
+    <!-- Auth Page -->
+    <div id="authPage">
+        <div class="logo-main">K-BOOST MM</div>
+        
+        <!-- Login Form -->
+        <div id="loginForm" class="card">
+            <h3 style="margin-top:0;">Login</h3>
+            <span class="info-label">Username</span>
+            <input id="uIn" type="text" placeholder="အမည်">
+            <span class="info-label">Password</span>
+            <input id="pIn" type="password" placeholder="စကားဝှက်">
+            <button class="btn btn-main" onclick="login()">Login Now</button>
+            <p style="text-align:center; font-size:13px; margin-top:20px; color:var(--text-dim);">အကောင့်မရှိသေးပါက <span onclick="toggleAuth(false)" style="color:var(--primary); font-weight:700; cursor:pointer;">ဒီမှာဖွင့်ပါ</span></p>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="signupForm" class="card hidden">
+            <h3 style="margin-top:0;">Create Account</h3>
+            <span class="info-label">Username</span>
+            <input id="uUp" type="text" placeholder="အမည်အသစ်">
+            <span class="info-label">Password</span>
+            <input id="pUp" type="password" placeholder="စကားဝှက်">
+            <span class="info-label">Telegram / Phone</span>
+            <input id="tgUp" type="text" placeholder="ဆက်သွယ်ရန်ဖုန်း သို့မဟုတ် @username">
+            <button class="btn btn-main" onclick="signup()">Register</button>
+            <p style="text-align:center; font-size:13px; margin-top:20px; color:var(--text-dim);">အကောင့်ရှိပြီးသားလား? <span onclick="toggleAuth(true)" style="color:var(--primary); font-weight:700; cursor:pointer;">ပြန်ဝင်မည်</span></p>
+        </div>
+    </div>
+
+    <!-- User Dashboard -->
+    <div id="userDash" class="hidden">
+        <div id="homeTab">
+            <div id="noti" style="margin: 15px; padding: 12px; background: rgba(0,210,255,0.05); border-left: 4px solid var(--primary); font-size: 13px; border-radius: 8px;"></div>
+            
+            <div class="card balance-card">
+                <div style="font-size: 12px; font-weight: 600; opacity: 0.8;">CURRENT BALANCE</div>
+                <div style="font-size: 35px; font-weight: 800; margin: 5px 0;"><span id="uBal">0</span> Ks</div>
+                <button class="btn-sm" style="background: #fff; color: #000; margin-top: 10px;" onclick="nav('fundTab')">Add Fund</button>
             </div>
-            <div class="form-slider" id="formSlider">
-                <div class="auth-form">
-                    <input type="text" id="uIn" placeholder="အသုံးပြုသူအမည်">
-                    <input type="password" id="pIn" placeholder="လျှို့ဝှက်နံပါတ်">
-                    <button class="btn btn-main" onclick="login()">ဝင်မည်</button>
+
+            <div class="card">
+                <h3 style="margin: 0 0 15px 0;">New Order</h3>
+                <span class="info-label">Category</span>
+                <select id="srvCat" onchange="loadSrvList()"></select>
+                <span class="info-label">Service</span>
+                <select id="srvList" onchange="updateCalc()"></select>
+                <span class="info-label">Link</span>
+                <input id="orderLink" placeholder="https://...">
+                <span class="info-label">Amount (Minimum 500 Ks)</span>
+                <input id="orderAmt" type="number" value="500" oninput="updateCalc()">
+                <div style="background: #0f172a; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 13px; color: var(--text-dim);">Quantity:</span>
+                    <b id="calcQty" style="font-size: 20px; color: var(--primary);">0</b>
                 </div>
-                <div class="auth-form">
-                    <input type="text" id="uUp" placeholder="အသုံးပြုသူအမည်သစ်">
-                    <input type="password" id="pUp" placeholder="လျှို့ဝှက်နံပါတ်အသစ်">
-                    <button class="btn btn-red" onclick="signup()">ဖွင့်မည်</button>
+                <button class="btn btn-main" style="margin-top: 20px;" onclick="placeOrder()">Order တင်မည်</button>
+            </div>
+        </div>
+
+        <div id="historyTab" class="hidden">
+            <h3 style="margin: 15px;">My Orders</h3>
+            <div id="orderList"></div>
+        </div>
+
+        <div id="fundTab" class="hidden">
+            <div class="card">
+                <h3>Deposit Funds</h3>
+                <div style="background: #1e293b; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="color: var(--primary); font-weight: 700; font-size: 13px;">Kpay / Wave</div>
+                    <div style="font-size: 20px; font-weight: 800; margin: 4px 0;">09970573598</div>
+                    <div style="font-size: 11px; opacity: 0.7;">Account: U Chit Thae Oo</div>
                 </div>
+                <span class="info-label">Amount (Ks)</span>
+                <input id="depAmt" type="number" placeholder="1000">
+                <span class="info-label">Transaction ID (Last 6 Digits)</span>
+                <input id="depProof" type="text" placeholder="123456">
+                <button class="btn btn-main" onclick="requestDeposit()">Submit Deposit</button>
             </div>
         </div>
     </div>
 
-    <div id="userSection" class="hidden">
-        <div class="wallet-box">
-            <small>လက်ရှိလက်ကျန်ငွေ</small>
-            <h2 style="margin:0;"><span id="userBalance">0</span> Ks</h2>
-            <button class="btn-sm" style="background:white; color:black; margin-top:5px;" onclick="nav('fundPage')">+ ငွေဖြည့်မည်</button>
-        </div>
-
-        <div id="userPage">
-            <div class="card">
-                <h4><i class="fas fa-cart-arrow-down"></i> မှာယူရန်</h4>
-                <select id="srvCat" onchange="loadSrvOptions()"></select>
-                <select id="srvList" onchange="calcQty()"></select>
-                <input type="url" id="targetLink" placeholder="Link ထည့်ပါ">
-                <input type="number" id="buyAmount" placeholder="ဝယ်ယူမည့်ငွေ (Ks)" oninput="calcQty()">
-                <div style="background:#000; padding:15px; border-radius:10px; text-align:center; border:1px dashed var(--border);">
-                    ရရှိမည့်အရေအတွက်: <b id="resultQty" style="color:var(--primary); font-size:22px;">0</b>
-                </div>
-                <button class="btn btn-main" style="margin-top:15px;" onclick="submitOrder()">ယခုမှာယူမည်</button>
-            </div>
-        </div>
-
-        <div id="fundPage" class="hidden">
-            <div class="card">
-                <h4>ငွေဖြည့်သွင်းရန်</h4>
-                <p style="font-size:12px; color:var(--primary);">Kpay: 09970573598 (Chit Thae Oo) သို့လွှဲပါ။</p>
-                <input type="number" id="fAmt" placeholder="ဖြည့်မည့်ပမာဏ (Ks)">
-                <input type="text" id="fProof" placeholder="Transaction ID (နောက်ဆုံး ၆ လုံး)">
-                <button class="btn btn-main" onclick="submitFund()">ငွေဖြည့်လွှာတင်မည်</button>
-            </div>
-        </div>
-
-        <div id="historyPage" class="hidden">
-            <div class="card"><h4>မှာယူမှုမှတ်တမ်း</h4><div id="orderHistory"></div></div>
-        </div>
-    </div>
-
+    <!-- Admin Panel -->
     <div id="adminPanel" class="hidden">
-        <div class="card" style="border: 2px solid gold;">
-            <h4 style="color:gold;"><i class="fas fa-user-shield"></i> Admin Control</h4>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-                <button class="btn-main btn-sm" onclick="adminTab('users')">အသုံးပြုသူများ</button>
-                <button class="btn-main btn-sm" onclick="adminTab('services')">ဝန်ဆောင်မှုများ</button>
-                <button class="btn-main btn-sm" onclick="adminTab('deposits')">ငွေဖြည့်လွှာများ</button>
-                <button class="btn-main btn-sm" onclick="adminTab('orders')">အော်ဒါအားလုံး</button>
-            </div>
+        <div class="admin-tab-bar">
+            <button class="tab-btn active" onclick="adminNav('users', this)">Users Info</button>
+            <button class="tab-btn" onclick="adminNav('funds', this)">Funds</button>
+            <button class="tab-btn" onclick="adminNav('orders', this)">Orders</button>
+            <button class="tab-btn" onclick="adminNav('services', this)">Services</button>
         </div>
-        <div id="aContent"></div>
+        <div id="adminContent" style="padding: 15px;"></div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div id="botNav" class="bottom-nav hidden">
+        <div class="nav-link active" onclick="nav('homeTab', this)"><i class="fas fa-home"></i><span>Home</span></div>
+        <div class="nav-link" onclick="nav('historyTab', this)"><i class="fas fa-list"></i><span>History</span></div>
+        <div class="nav-link" onclick="nav('fundTab', this)"><i class="fas fa-wallet"></i><span>Fund</span></div>
     </div>
 </div>
-
-<nav id="botNav" class="bottom-nav hidden">
-    <div class="nav-link active" id="nHome" onclick="nav('userPage')"><i class="fas fa-home"></i><br>ပင်မ</div>
-    <div class="nav-link" id="nHistory" onclick="nav('historyPage')"><i class="fas fa-list"></i><br>မှတ်တမ်း</div>
-    <div class="nav-link" id="nFund" onclick="nav('fundPage')"><i class="fas fa-wallet"></i><br>ငွေဖြည့်</div>
-</nav>
 
 <script>
-    // --- FIREBASE CONFIG ---
-    const firebaseConfig = {
-        apiKey: "AIzaSyB2wvjD9I_vCJDTpaNks8CCuTm4PDngajg",
-        databaseURL: "https://kboostsmm-default-rtdb.firebaseio.com",
-    };
+    // Firebase Setup
+    const firebaseConfig = { apiKey: "AIzaSyB2wvjD9I_vCJDTpaNks8CCuTm4PDngajg", databaseURL: "https://kboostsmm-default-rtdb.firebaseio.com" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    let currentUser = null, myBalance = 0, allServices = {};
 
-    // --- AUTH LOGIC ---
-    function toggleAuth(type) {
-        const slider = document.getElementById('formSlider');
-        if(type === 'login') {
-            slider.style.transform = 'translateX(0%)';
-            document.getElementById('tLog').classList.add('active');
-            document.getElementById('tSig').classList.remove('active');
-        } else {
-            slider.style.transform = 'translateX(-50%)';
-            document.getElementById('tSig').classList.add('active');
-            document.getElementById('tLog').classList.remove('active');
-        }
+    let currentUser = null, myData = null, services = {};
+
+    // Auth Switch
+    function toggleAuth(isLogin) {
+        document.getElementById('loginForm').classList.toggle('hidden', !isLogin);
+        document.getElementById('signupForm').classList.toggle('hidden', isLogin);
     }
 
-    function signup() {
-        const u = document.getElementById('uUp').value.trim(), p = document.getElementById('pUp').value.trim();
-        if(u && p) {
-            db.ref('users/'+u).set({password:p, balance:0, isBanned:false}).then(() => {
-                alert("အကောင့်ဖွင့်ပြီးပါပြီ!"); toggleAuth('login');
-            });
-        }
-    }
-
+    // Login
     function login() {
-        const u = document.getElementById('uIn').value.trim(), p = document.getElementById('pIn').value.trim();
-        if(u === "KBOOSTMM" && p === "090635") { currentUser = "Admin"; showAdmin(); }
-        else if(u && p) {
-            db.ref('users/'+u).once('value', s => {
-                const d = s.val();
-                if(d && d.password === p) {
-                    if(d.isBanned) return alert("Account Banned!");
-                    currentUser = u; showUser();
-                } else alert("အမည်/လျှို့ဝှက်နံပါတ် မှားယွင်းနေပါသည်။");
-            });
-        }
-    }
-
-    // --- USER LOGIC ---
-    function showUser() {
-        document.getElementById('authPanel').classList.add('hidden');
-        ['topNav', 'botNav', 'userSection'].forEach(id => document.getElementById(id).classList.remove('hidden'));
-        document.getElementById('userDisplay').innerText = currentUser;
-        db.ref('users/'+currentUser+'/balance').on('value', s => {
-            myBalance = s.val() || 0;
-            document.getElementById('userBalance').innerText = myBalance.toLocaleString();
-        });
-        loadSrvCategories();
-    }
-
-    function nav(p) {
-        ['userPage', 'historyPage', 'fundPage'].forEach(id => document.getElementById(id).classList.add('hidden'));
-        document.getElementById(p).classList.remove('hidden');
-        if(p === 'historyPage') loadUserHistory();
-    }
-
-    function loadSrvCategories() {
-        db.ref('services').on('value', s => {
-            allServices = s.val() || {};
-            const sel = document.getElementById('srvCat'); sel.innerHTML = '<option>အမျိုးအစားရွေးပါ</option>';
-            for(let cat in allServices) sel.innerHTML += `<option value="${cat}">${cat}</option>`;
+        const u = document.getElementById('uIn').value.trim().toLowerCase();
+        const p = document.getElementById('pIn').value.trim();
+        if(u === "kboostmm" && p === "090635") { startAdmin(); return; }
+        
+        db.ref('users/' + u).once('value', s => {
+            const d = s.val();
+            if(d && d.password === p) {
+                if(d.isBanned) return alert("Your account is banned.");
+                currentUser = u; myData = d; startUser();
+            } else alert("Invalid username or password.");
         });
     }
 
-    function loadSrvOptions() {
-        const cat = document.getElementById('srvCat').value;
-        const list = document.getElementById('srvList'); list.innerHTML = "";
-        if(allServices[cat]) {
-            for(let id in allServices[cat]) list.innerHTML += `<option value="${allServices[cat][id].rate}">${allServices[cat][id].name}</option>`;
-        }
-        calcQty();
-    }
-
-    function calcQty() {
-        const r = parseFloat(document.getElementById('srvList').value)||0, a = parseFloat(document.getElementById('buyAmount').value)||0;
-        document.getElementById('resultQty').innerText = Math.floor(r*a).toLocaleString();
-    }
-
-    function submitOrder() {
-        const amt = parseFloat(document.getElementById('buyAmount').value), link = document.getElementById('targetLink').value;
-        if(amt > myBalance) return alert("ငွေမလောက်ပါ!");
-        if(amt > 0 && link) {
-            db.ref('users/'+currentUser).update({balance: myBalance - amt});
-            db.ref('orders').push({user:currentUser, service:document.getElementById('srvList').options[document.getElementById('srvList').selectedIndex].text, link:link, amount:amt, qty:document.getElementById('resultQty').innerText, status:'Pending', time:new Date().toLocaleString()});
-            alert("မှာယူမှု အောင်မြင်ပါသည်!"); nav('historyPage');
-        }
-    }
-
-    function submitFund() {
-        const amt = parseInt(document.getElementById('fAmt').value), p = document.getElementById('fProof').value;
-        if(amt && p) {
-            db.ref('deposits').push({user:currentUser, amount:amt, proof:p, status:'Pending'});
-            alert("ငွေဖြည့်လွှာ တင်သွင်းပြီးပါပြီ!"); nav('userPage');
-        }
-    }
-
-    function loadUserHistory() {
-        db.ref('orders').orderByChild('user').equalTo(currentUser).on('value', s => {
-            const area = document.getElementById('orderHistory'); area.innerHTML = "";
-            s.forEach(c => {
-                const o = c.val();
-                area.innerHTML += `<div class="card"><span class="badge st-${o.status}">${o.status}</span><br><b>${o.service}</b><br><small>${o.qty} units | ${o.amount} Ks</small></div>`;
-            });
+    // Signup
+    function signup() {
+        const u = document.getElementById('uUp').value.trim().toLowerCase(), p = document.getElementById('pUp').value.trim(), tg = document.getElementById('tgUp').value.trim();
+        if(!u || !p || !tg) return alert("အချက်အလက်ပြည့်စုံစွာဖြည့်ပါ။");
+        db.ref('users/' + u).once('value', s => {
+            if(s.exists()) return alert("အမည်ရှိပြီးသားပါ။");
+            db.ref('users/' + u).set({ password:p, telegram:tg, balance:0, isBanned:false }).then(() => { alert("အောင်မြင်ပါသည်။"); toggleAuth(true); });
         });
     }
 
-    // --- ADMIN LOGIC ---
-    function showAdmin() {
-        document.getElementById('authPanel').classList.add('hidden');
-        ['topNav', 'adminPanel'].forEach(id => document.getElementById(id).classList.remove('hidden'));
-        document.getElementById('userDisplay').innerText = "Admin Panel";
-        adminTab('users');
+    // Start User Mode
+    function startUser() {
+        document.getElementById('authPage').classList.add('hidden');
+        ['topNav', 'botNav', 'userDash'].forEach(id => document.getElementById(id).classList.remove('hidden'));
+        document.getElementById('userBadge').innerText = "@" + currentUser;
+        
+        db.ref('users/' + currentUser + '/balance').on('value', s => {
+            myData.balance = s.val() || 0;
+            document.getElementById('uBal').innerText = myData.balance.toLocaleString();
+        });
+        db.ref('announcement').on('value', s => document.getElementById('noti').innerText = s.val() || "K-BOOST MM မှ ကြိုဆိုပါတယ်!");
+        
+        loadSrvCats();
     }
 
-    function adminTab(t) {
-        const area = document.getElementById('aContent'); area.innerHTML = "ခဏစောင့်ပါ...";
-        if(t === 'users') {
+    // Start Admin Mode
+    function startAdmin() {
+        document.getElementById('authPage').classList.add('hidden');
+        document.getElementById('topNav').classList.remove('hidden');
+        document.getElementById('adminPanel').classList.remove('hidden');
+        document.getElementById('userBadge').innerText = "ADMIN";
+        adminNav('users', document.querySelector('.tab-btn'));
+    }
+
+    // Navigation
+    function nav(tab, el) {
+        if(el) {
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            el.classList.add('active');
+        }
+        ['homeTab', 'historyTab', 'fundTab'].forEach(t => document.getElementById(t).classList.add('hidden'));
+        document.getElementById(tab).classList.remove('hidden');
+        if(tab === 'historyTab') loadOrders();
+    }
+
+    // Admin Tabs
+    function adminNav(tab, el) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        const area = document.getElementById('adminContent');
+        area.innerHTML = "Loading...";
+
+        if(tab === 'users') {
             db.ref('users').on('value', s => {
-                area.innerHTML = "<h4>အသုံးပြုသူများ စာရင်း</h4>";
+                area.innerHTML = "<h3>All Users Info</h3>";
+                s.forEach(u => {
+                    if(u.key === "kboostmm") return;
+                    const d = u.val();
+                    area.innerHTML += `
+                        <div class="user-detail-card">
+                            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #222; padding-bottom:8px; margin-bottom:8px;">
+                                <b style="color:var(--primary); font-size:16px;">@${u.key}</b>
+                                <button class="btn-sm" style="background:var(--red); color:#fff;" onclick="deleteUser('${u.key}')">Delete User</button>
+                            </div>
+                            <div style="font-size:12px; display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                                <div><span class="info-label">Balance</span><b>${d.balance} Ks</b></div>
+                                <div><span class="info-label">Password</span><b>${d.password}</b></div>
+                                <div style="grid-column: span 2;"><span class="info-label">Telegram / Phone</span><b>${d.telegram}</b></div>
+                            </div>
+                            <div style="margin-top:10px; display:flex; gap:8px;">
+                                <button class="btn-sm" style="background:var(--primary); color:#000; flex:1;" onclick="updateBal('${u.key}', ${d.balance})">Edit Balance</button>
+                                <button class="btn-sm" style="background:${d.isBanned?'var(--green)':'var(--yellow)'}; color:#000; flex:1;" onclick="db.ref('users/${u.key}').update({isBanned:!${d.isBanned}})">${d.isBanned?'Unban':'Ban'}</button>
+                            </div>
+                        </div>`;
+                });
+            });
+        }
+
+        if(tab === 'funds') {
+            db.ref('deposits').on('value', s => {
+                area.innerHTML = "<h3>Fund Requests</h3>";
                 s.forEach(c => {
-                    if(c.key === "Admin") return;
-                    const d = c.val();
-                    area.innerHTML += `<div class="card">
-                        <b>${c.key}</b><br>Pass: ${d.password} | Bal: ${d.balance} Ks<br>
-                        <button class="btn-sm btn-main" onclick="adjustBal('${c.key}')">ငွေပြင်မည်</button>
-                        <button class="btn-sm btn-red" onclick="db.ref('users/${c.key}').update({isBanned:!${d.isBanned}})">${d.isBanned?'Unban':'Ban'}</button>
+                    const d = c.val(); if(d.status === 'Pending') {
+                        area.innerHTML += `<div class="user-detail-card"><b>@${d.user}</b> - ${d.amount} Ks<br><small>Code: ${d.proof}</small>
+                        <div style="margin-top:10px; display:flex; gap:8px;"><button class="btn-sm" style="background:var(--green); color:#fff; flex:1;" onclick="approveDep('${c.key}','${d.user}',${d.amount})">Approve</button>
+                        <button class="btn-sm" style="background:var(--red); color:#fff; flex:1;" onclick="db.ref('deposits/${c.key}').update({status:'Canceled'})">Reject</button></div></div>`;
+                    }
+                });
+            });
+        }
+
+        if(tab === 'orders') {
+            db.ref('orders').on('value', s => {
+                area.innerHTML = "<h3>Order Management</h3>";
+                let list = []; s.forEach(c => list.unshift({id:c.key, ...c.val()}));
+                list.forEach(o => {
+                    area.innerHTML += `<div class="user-detail-card" style="font-size:13px;">
+                        <div style="display:flex; justify-content:space-between;"><b>@${o.user}</b> <span class="badge st-${o.status}">${o.status}</span></div>
+                        <div style="margin:5px 0; color:var(--primary); font-weight:600;">${o.service}</div>
+                        <div style="font-size:11px; color:var(--text-dim); margin-bottom:10px;">Qty: ${o.qty} | Link: ${o.link}</div>
+                        <select onchange="db.ref('orders/${o.id}').update({status:this.value})"><option value="Pending" ${o.status==='Pending'?'selected':''}>Pending</option><option value="Completed" ${o.status==='Completed'?'selected':''}>Completed</option><option value="Canceled" ${o.status==='Canceled'?'selected':''}>Canceled</option></select>
                     </div>`;
                 });
             });
         }
-        if(t === 'services') {
+
+        if(tab === 'services') {
+            area.innerHTML = `
+                <div class="card" style="margin:0 0 20px 0; border:1px solid var(--primary);">
+                    <h4>Add New Service</h4>
+                    <input id="nCat" placeholder="Category Name">
+                    <input id="nNam" placeholder="Service Name">
+                    <input id="nRat" type="number" step="0.000001" placeholder="Rate (1 Ks = ? Qty)">
+                    <button class="btn btn-main" onclick="addSrv()">Add Service</button>
+                </div>
+                <div id="admSrvList"></div>`;
             db.ref('services').on('value', s => {
-                let html = `<div class="card"><h4>ဝန်ဆောင်မှုအသစ်ထည့်ရန်</h4>
-                    <input id="nCat" placeholder="Category (TikTok Followers)">
-                    <input id="nName" placeholder="Service Name (High Quality)">
-                    <input id="nRate" type="number" step="0.01" placeholder="၁ ကျပ်လျှင်ရမည့် အရေအတွက်">
-                    <button class="btn btn-main" onclick="addSrv()">ပေါင်းထည့်မည်</button></div>`;
-                const data = s.val();
+                const list = document.getElementById('admSrvList');
+                list.innerHTML = "";
+                const data = s.val() || {};
                 for(let cat in data) {
-                    html += `<h5 style="color:var(--primary); margin:10px 0;">${cat}</h5>`;
                     for(let id in data[cat]) {
-                        html += `<div class="card" style="display:flex; justify-content:space-between;">
-                            <span>${data[cat][id].name} (Rate: ${data[cat][id].rate})</span>
-                            <button class="btn-sm btn-red" onclick="db.ref('services/${cat}/${id}').remove()">ဖျက်မည်</button>
-                        </div>`;
+                        list.innerHTML += `<div class="user-detail-card"><b>${data[cat][id].name}</b> (${cat}) <button style="float:right; background:var(--red); border:none; color:white; border-radius:4px; padding:2px 8px;" onclick="db.ref('services/${cat}/${id}').remove()">X</button></div>`;
                     }
                 }
-                area.innerHTML = html;
-            });
-        }
-        if(t === 'deposits') {
-            db.ref('deposits').on('value', s => {
-                area.innerHTML = "<h4>ငွေဖြည့်လွှာများ</h4>";
-                s.forEach(c => {
-                    const d = c.val();
-                    if(d.status === 'Pending') {
-                        area.innerHTML += `<div class="card">${d.user}: ${d.amount} Ks (ID: ${d.proof})<br>
-                        <button class="btn-main btn-sm" onclick="approveDep('${c.key}','${d.user}',${d.amount})">အတည်ပြုမည်</button></div>`;
-                    }
-                });
-            });
-        }
-        if(t === 'orders') {
-            db.ref('orders').on('value', s => {
-                area.innerHTML = "<h4>အော်ဒါအားလုံး</h4>";
-                s.forEach(c => {
-                    const o = c.val();
-                    area.innerHTML += `<div class="card"><b>${o.user}</b> - ${o.service}<br>Link: ${o.link}<br>
-                    <select onchange="db.ref('orders/${c.key}').update({status:this.value})">
-                        <option value="Pending" ${o.status==='Pending'?'selected':''}>Pending</option>
-                        <option value="Completed" ${o.status==='Completed'?'selected':''}>Completed</option>
-                        <option value="Canceled" ${o.status==='Canceled'?'selected':''}>Canceled</option>
-                    </select></div>`;
-                });
             });
         }
     }
 
-    function addSrv() {
-        const c = document.getElementById('nCat').value, n = document.getElementById('nName').value, r = document.getElementById('nRate').value;
-        if(c && n && r) db.ref('services/'+c).push({name:n, rate:parseFloat(r)});
+    // User Functions
+    function loadSrvCats() {
+        db.ref('services').on('value', s => {
+            services = s.val() || {};
+            const cat = document.getElementById('srvCat');
+            cat.innerHTML = '<option value="">Category ရွေးပါ</option>';
+            for(let c in services) cat.innerHTML += `<option value="${c}">${c}</option>`;
+        });
     }
 
-    function adjustBal(uid) {
-        const n = prompt(uid + " အတွက် လက်ကျန်ငွေအသစ်:");
-        if(n) db.ref('users/'+uid).update({balance: parseInt(n)});
+    function loadSrvList() {
+        const c = document.getElementById('srvCat').value, list = document.getElementById('srvList');
+        list.innerHTML = '<option value="">Service ရွေးပါ</option>';
+        if(services[c]) for(let id in services[c]) list.innerHTML += `<option value="${id}">${services[c][id].name}</option>`;
+        updateCalc();
     }
 
+    function updateCalc() {
+        const c = document.getElementById('srvCat').value, id = document.getElementById('srvList').value, amt = parseFloat(document.getElementById('orderAmt').value) || 0;
+        const rate = (services[c] && services[c][id]) ? services[c][id].rate : 0;
+        document.getElementById('calcQty').innerText = Math.floor(rate * amt).toLocaleString();
+    }
+
+    function placeOrder() {
+        const c = document.getElementById('srvCat').value, id = document.getElementById('srvList').value, amt = parseFloat(document.getElementById('orderAmt').value), link = document.getElementById('orderLink').value.trim();
+        if(!id || isNaN(amt) || amt < 500 || !link) return alert("အချက်အလက်မှားယွင်းနေပါသည်။");
+        if(amt > myData.balance) return alert("လက်ကျန်ငွေမလောက်ပါ။");
+        
+        db.ref('users/' + currentUser).update({ balance: myData.balance - amt }).then(() => {
+            db.ref('orders').push({ user:currentUser, service:services[c][id].name, amount:amt, qty:document.getElementById('calcQty').innerText, link:link, status:'Pending', time:new Date().toLocaleString() });
+            alert("Order အောင်မြင်ပါသည်။"); nav('historyTab', document.querySelectorAll('.nav-link')[1]);
+        });
+    }
+
+    function loadOrders() {
+        db.ref('orders').orderByChild('user').equalTo(currentUser).on('value', s => {
+            const area = document.getElementById('orderList'); area.innerHTML = "";
+            let list = []; s.forEach(c => list.unshift(c.val()));
+            list.forEach(o => {
+                area.innerHTML += `<div class="card">
+                    <div style="display:flex; justify-content:space-between;"><b>${o.service}</b><span class="badge st-${o.status}">${o.status}</span></div>
+                    <div style="font-size:12px; margin:5px 0;">Qty: ${o.qty} | Amt: ${o.amount} Ks</div>
+                    <div style="font-size:10px; color:var(--text-dim); word-break:break-all;">${o.link}</div>
+                </div>`;
+            });
+        });
+    }
+
+    function requestDeposit() {
+        const a = parseInt(document.getElementById('depAmt').value), p = document.getElementById('depProof').value.trim();
+        if(!a || !p) return alert("Fill data.");
+        db.ref('deposits').push({ user:currentUser, amount:a, proof:p, status:'Pending', time:new Date().toLocaleString() }).then(()=>alert("တင်သွင်းပြီးပါပြီ။"));
+    }
+
+    // Admin Action Functions
+    function deleteUser(u) {
+        if(confirm(`@${u} ကို လုံးဝဖျက်မှာ သေချာပါသလား?`)) db.ref('users/'+u).remove();
+    }
+    function updateBal(u, cur) {
+        const v = prompt(`@${u} လက်ကျန်ငွေပြင်ဆင်မည်`, cur);
+        if(v !== null) db.ref('users/'+u).update({ balance: parseInt(v) });
+    }
     function approveDep(k, u, a) {
         db.ref('users/'+u+'/balance').once('value', s => {
-            db.ref('users/'+u).update({balance: (s.val()||0) + a});
-            db.ref('deposits/'+k).update({status: 'Completed'});
-            alert("Approve အောင်မြင်သည်!");
+            db.ref('users/'+u).update({ balance: (s.val()||0) + a });
+            db.ref('deposits/'+k).update({ status: 'Completed' });
         });
+    }
+    function addSrv() {
+        const c=document.getElementById('nCat').value, n=document.getElementById('nNam').value, r=document.getElementById('nRat').value;
+        if(c && n && r) db.ref('services/'+c).push({ name:n, rate:parseFloat(r) }).then(()=>alert("Success"));
     }
 </script>
 </body>
 </html>
+
